@@ -1,14 +1,15 @@
 const xweapon = getExcel('WeaponExcelConfigData');
 const xrefine = getExcel('EquipAffixExcelConfigData');
 
+const moraNameTextMapHash = getExcel('MaterialExcelConfigData').find(ele => ele.Id === 202).NameTextMapHash;
+const xmat = getExcel('MaterialExcelConfigData');
+
 const xplayableWeapon = xweapon.filter(obj => {
 	if(obj.RankLevel >= 3 && obj.SkillAffix[0] === 0) return false;
 	if(obj.SkillAffix[1] !== 0) { console.log('danger'); return false };
 	if(getLanguage('EN')[obj.NameTextMapHash] === '') return false;
 	return true;
 });
-
-
 
 function collateWeapon(lang) {
 	const language = getLanguage(lang);
@@ -52,6 +53,26 @@ function collateWeapon(lang) {
 				}, '');
 			}
 		}
+
+		// get the promotion costs
+		let costs = {};
+		for(let i = 1; i <= (obj.RankLevel <= 2 ? 4 : 6); i++) {
+			// 1 and 2 star weapons only have 4 ascensions instead of 6
+			let apromo = xsubstat.find(ele => ele.WeaponPromoteId === obj.WeaponPromoteId && ele.PromoteLevel === i);
+			costs['ascend'+i] = [{
+				name: language[moraNameTextMapHash],
+				count: apromo.CoinCost
+			}];
+
+			for(let items of apromo.CostItems) {
+				if(items.Id === undefined) continue;
+				costs['ascend'+i].push({
+					name: language[xmat.find(ele => ele.Id === items.Id).NameTextMapHash],
+					count: items.Count
+				})
+			}
+		}
+		data.costs = costs;
 
 		// INFORMATION TO CALCULATE STATS AT EACH LEVEL
 		let stats = { base: {}, curve: {} };

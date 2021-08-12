@@ -70,24 +70,24 @@ function collateFood(lang) {
 		let basedish = data.name;
 		let ingredients = data.ingredients;
 
-		data = {};
-		data.name = language[xd.NameTextMapHash];
-		data.rarity = xd.RankLevel;
-		data.foodtype = 'SPECIALTY';
-		data.foodfilter = foodfilter;
-		data.foodcategory = xd.EffectIcon.substring(13);
+		let spdata = {};
+		spdata.name = language[xd.NameTextMapHash];
+		spdata.rarity = xd.RankLevel;
+		spdata.foodtype = 'SPECIALTY';
+		spdata.foodfilter = foodfilter;
+		spdata.foodcategory = xd.EffectIcon.substring(13);
 
 		if(language[xd.InteractionTitleTextMapHash]) console.log(`specialty ${obj.Id} has interaction`);
 		if(language[xd.SpecialDescTextMapHash]) console.log(`specialty ${obj.Id} has special`);
-		data.effect = language[xd.EffectDescTextMapHash];
-		data.description = sanitizeDescription(language[xd.DescTextMapHash]);
+		spdata.effect = language[xd.EffectDescTextMapHash];
+		spdata.description = sanitizeDescription(language[xd.DescTextMapHash]);
 
-		data.basedish = basedish;
-		data.character = language[getAvatar(myspec.AvatarId).NameTextMapHash];
+		spdata.basedish = basedish;
+		spdata.character = language[getAvatar(myspec.AvatarId).NameTextMapHash];
 		
-		data.ingredients = ingredients;
+		spdata.ingredients = ingredients;
 
-		accum[makeFileName(getLanguage('EN')[obj.NameTextMapHash])] = data;
+		accum[makeFileName(getLanguage('EN')[xd.NameTextMapHash])] = spdata;
 		return accum;
 	}, {});
 	// console.log(myfood);

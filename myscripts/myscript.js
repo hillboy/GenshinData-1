@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 global.getExcel = function(file) { return require(`../ExcelBinOutput/${file}.json`); }
-global.getTextMap = function(langcode) { return require(`../TextMap/Text${langcode}.json`); }
+global.getTextMap = function(langcode) { return require(`../TextMap/TextMap${langcode}.json`); }
 
 const xavatar = getExcel('AvatarExcelConfigData');    // array
 
@@ -9,7 +9,7 @@ global.xskilldepot = getExcel('AvatarSkillDepotExcelConfigData');
 
 global.xmanualtext = getExcel('ManualTextMapConfigData');
 
-const langcodes = ['CHS', 'CHT', 'DE', 'EN', 'ES', 'FR', 'ID', 'JA', 'KO', 'PT', 'RU', 'TH', 'VI'];
+const langcodes = ['CHS', 'CHT', 'DE', 'EN', 'ES', 'FR', 'ID', 'JP', 'KR', 'PT', 'RU', 'TH', 'VI'];
 
 /* ========================================================================================== */
 
@@ -31,10 +31,9 @@ global.makeFileName = function(str, lang) { return normalizeStr(str).toLowerCase
 global.convertBold = function(str) { return str.replace(/<color=#FFD780FF>(.*?)<\/color>/gi, '**$1**'); }
 global.stripHTML = function(str) { return (str || '').replace(/(<([^>]+)>)/gi, ''); }
 global.capitalizeFirst = function(str) { return str[0].toUpperCase() + str.toLowerCase().slice(1); }
-global.replaceLayout = function(str) { return str.replace(/{LAYOUT_MOBILE#Tap}{LAYOUT_PC#Press}{LAYOUT_PS#Press}/gi,'Press').replace('#',''); }
+global.replaceLayout = function(str) { return str.replace(/{LAYOUT_MOBILE#.*?}{LAYOUT_PC#(.*?)}{LAYOUT_PS#.*?}/gi,'$1').replace('#',''); }
 global.replaceNewline = function(str) { return str.replace(/\\n/gi, '\n'); }
 global.sanitizeDescription = function(str) { return replaceNewline(replaceLayout(stripHTML(convertBold(str)))); }
-
 /* ======================================================================================= */
 
 // object map that converts the genshin coded element into a TextMapHash
@@ -43,7 +42,7 @@ global.elementTextMapHash = ['Fire', 'Water', 'Grass', 'Electric', 'Wind', 'Ice'
 	return accum;
 }, {});
 
-global.xplayableAvatar = xavatar.filter(obj => obj.AvatarPromoteId !== 2); // array
+global.xplayableAvatar = xavatar.filter(obj => obj.AvatarPromoteId !== 2 || obj.Id === 10000002); // array
 // object map that converts an avatar Id or traveler SkillDepotId to filename
 global.avatarIdToFileName = xplayableAvatar.reduce((accum, obj) => {
 	if(obj.Id === 10000005) accum[obj.Id] = 'aether';
@@ -64,6 +63,11 @@ global.weaponTextMapHash = ['WEAPON_SWORD_ONE_HAND', 'WEAPON_CATALYST', 'WEAPON_
 	accum[str] = xmanualtext.find(ele => ele.TextMapId === str).TextMapContentTextMapHash;
 	return accum;
 }, {});
+
+// translates day of the week. 1 => Monday, etc. Returns textmaphash
+global.dayOfWeek = function(num) {
+	return xmanualtext.find(ele => ele.TextMapId === 'UI_ABYSSUS_DATE'+num).TextMapContentTextMapHash;
+}
 
 /* =========================================================================================== */
 
@@ -89,6 +93,7 @@ function exportData(folder, collateFunc, englishonly, skipwrite) {
 		if(!skipwrite) {
 			fs.writeFileSync(`./export/${lang}/${folder}.json`, JSON.stringify(data, null, '\t'));
 			if(JSON.stringify(data).search('undefined') !== -1) console.log('undefined found in '+folder);
+			if(data[""]) console.log('empty key found in '+folder);
 		}
 	});
 	console.log("done "+folder);
@@ -98,10 +103,11 @@ function exportData(folder, collateFunc, englishonly, skipwrite) {
 // exportCurve('characters', 'AvatarCurveExcelConfigData');
 // exportData('constellations', require('./collateConstellation'));
 // exportData('talents', require('./collateTalent.js'));
-// exportData('weapons', require('./collateWeapon.js'));
+exportData('weapons', require('./collateWeapon.js'));
 // exportCurve('weapons', 'WeaponCurveExcelConfigData')
 // exportData('artifacts', require('./collateArtifact.js'));
-exportData('foods', require('./collateFood'));
+// exportData('foods', require('./collateFood'));
+// exportData('materials', require('./collateMaterial'));
 
 //console.log(collateCharacter('EN'))
 //console.log(collateConstellation('EN').hutao)
