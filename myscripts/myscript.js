@@ -107,8 +107,8 @@ function exportData(folder, collateFunc, englishonly, skipwrite) {
 // exportCurve('weapons', 'WeaponCurveExcelConfigData')
 // exportData('artifacts', require('./collateArtifact.js'));
 // exportData('foods', require('./collateFood'));
-// exportData('materials', require('./collateMaterial'));
-exportData('domains', require('./collateDomain'));
+// exportData('materials', require('./collateMaterial')); // run twice
+exportData('domains', require('./collateDomain')); // run twice // remember to add back recommendedelements and disorder
 
 
 //console.log(collateCharacter('EN'))

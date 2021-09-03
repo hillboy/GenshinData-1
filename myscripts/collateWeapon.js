@@ -17,6 +17,8 @@ function collateWeapon(lang) {
 	let myweapon = xplayableWeapon.reduce((accum, obj) => {
 
 		let data = {};
+		let filename = makeFileName(getLanguage('EN')[obj.NameTextMapHash]);
+		if(accum[filename] !== undefined) console.log(filename+' IS NOT UNIQUE');
 
 		data.name = language[obj.NameTextMapHash];
 		data.description = language[obj.DescTextMapHash];
@@ -40,6 +42,11 @@ function collateWeapon(lang) {
 				if(ref === undefined) break;
 				if(offset === 0) data.effectname = language[ref.NameTextMapHash];
 				let effect = language[ref.DescTextMapHash];
+				if(filename === 'swordofdescension') { // has extra color
+					effect = effect.replace(/<color=#.*?>/i, '').replace(/<\/color>/i, '');
+					effect = effect.replace(/<color=#.*?>/i, '').replace(/<\/color>/i, '');
+				}
+
 				effect = effect.replace(/<color=#.*?>/gi, '{').replace(/<\/color>/gi, '}');
 				effect = effect.split(/{|}/);
 				data['r'+(offset+1)] = [];
@@ -102,8 +109,7 @@ function collateWeapon(lang) {
 		data.icon = obj.Icon;
 		data.awakenicon = obj.AwakenIcon;
 
-		let filename = makeFileName(getLanguage('EN')[obj.NameTextMapHash]);
-		if(accum[filename] !== undefined) console.log(filename+' IS NOT UNIQUE');
+
 		accum[filename] = data;
 		return accum;
 	}, {});

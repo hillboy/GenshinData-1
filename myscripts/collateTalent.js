@@ -17,11 +17,15 @@ function collateTalent(lang) {
 			if(depot === undefined || depot.EnergySkill === undefined) return; // not a finished (traveler) character
 			if(depot.TalentStarName === '') return; // unfinished
 
+			let filename = avatarIdToFileName[isPlayer(obj) ? obj.SkillDepotId : obj.Id];
+
 			data.name = language[obj.NameTextMapHash]; // client-facing name
 			if(isPlayer(obj)) data.name += ` (${language[elementTextMapHash[getPlayerElement(obj.SkillDepotId)]]})`
 
 			let combat = depot.Skills.concat([depot.EnergySkill]) // get array of combat skills IDs
-			let passive = depot.InherentProudSkillOpens.reduce((accum2, proud) => { // get array of passive skill IDs
+			// console.log(depot.InherentProudSkillOpens)
+			let passive = depot.InherentProudSkillOpens.reduce((accum2, proud, index) => { // get array of passive skill IDs
+				if(filename === 'raidenshogun' && index === 2) return accum2; // skip hidden cannot cook passive
 				if(proud.ProudSkillGroupId) accum2.push(proud.ProudSkillGroupId);
 				return accum2;
 			}, [])
@@ -85,7 +89,7 @@ function collateTalent(lang) {
 			data.costs = costs;
 			data.parameters = parameters;
 
-			accum[avatarIdToFileName[isPlayer(obj) ? obj.SkillDepotId : obj.Id]] = data;
+			accum[filename] = data;
 		}
 
 		if(isPlayer(obj)) {

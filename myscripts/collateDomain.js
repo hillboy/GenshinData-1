@@ -3,13 +3,17 @@ const xpreview = getExcel('RewardPreviewExcelConfigData');
 const xdungeonentry = getExcel('DungeonEntryExcelConfigData'); // adventure handbook
 const xdisplay = getExcel('DisplayItemExcelConfigData');
 const xdisorder = getExcel('DungeonLevelEntityConfigData'); // ley line disorder
+const xcity = getExcel('CityConfigData');
 
-// maps the domain type in DungeonEntryExcelConfigData to the ManualTextMapConfigData
-const mapDomainType = {
-	DUNGEN_ENTRY_TYPE_RELIQUARY: "UI_ABYSSUS_RELIC",
-	DUNGEN_ENTRY_TYPE_WEAPON_PROMOTE: "UI_ABYSSUS_WEAPON_PROMOTE",
-	DUNGEN_ENTRY_TYPE_AVATAR_TALENT: "UI_ABYSSUS_AVATAR_PROUD"
-};
+// something inside ManualTextMapConfigData
+const domainType = {
+	UI_ABYSSUS_RELIC: "UI_ABYSSUS_RELIC",
+	UI_ABYSSUS_WEAPON_PROMOTE: "UI_ABYSSUS_WEAPON_PROMOTE",
+	UI_ABYSSUS_AVATAR_PROUD: "UI_ABYSSUS_AVATAR_PROUD"
+}
+function getDomainTypeTextMapHash(domaintype) {
+	return xmanualtext.find(ele => ele.TextMapId === domaintype).TextMapContentTextMapHash;
+}
 
 /*
 "UI_DUNGEON_ENTRY_27", // "Valley of Remembrance"
@@ -77,20 +81,18 @@ function collateDomain(lang) {
 	let mydomain = xdungeon.reduce((accum, obj) => {
 		if(obj.Type !== "DUNGEON_DAILY_FIGHT" || obj.StateType !== "DUNGEON_STATE_RELEASE") return accum;
 		if(isSundaySpecial(getLanguage('EN')[obj.NameTextMapHash])) return accum;
-
+		// console.log(obj.Id);
 		let data = {};
 		// data.Id = obj.Id;
 		data.name = language[obj.NameTextMapHash];
 		// data.displayname = language[obj.DisplayNameTextMapHash]; // doesn't exist for artifact domains
 		data.domainentrance = language[getDomainEntranceTextMapHash(getLanguage('EN')[obj.NameTextMapHash])];// obj.EntryPicPath;
-
-		let entrance = xdungeonentry.find(entry => entry.PicPath === obj.EntryPicPath);
-		// somehow domaintype works. otherwise just set it from rewardpreview material
-		data.domaintype = language[xmanualtext.find(ele => ele.TextMapId === mapDomainType[entrance.Type]).TextMapContentTextMapHash];
 		data.description = language[obj.DescTextMapHash];
 
+		data.region = language[xcity.find(city => city.CityId === obj.CityID).CityNameTextMapHash];
+
 		data.recommendedlevel = obj.ShowLevel;
-		data.recommendedelements = obj.RecommendElementTypes.filter(ele => ele !== 'None').map(ele => language[xmanualtext.find(man => man.TextMapId === ele).TextMapContentTextMapHash]);
+		// data.recommendedelements = obj.RecommendElementTypes.filter(ele => ele !== 'None').map(ele => language[xmanualtext.find(man => man.TextMapId === ele).TextMapContentTextMapHash]);
 		data.daysofweek = getDayWeekList(obj.Id, language);
 		if(data.daysofweek.length === 0) delete data.daysofweek;
 
@@ -101,13 +103,19 @@ function collateDomain(lang) {
 			if(mat) { // is material
 				let reward = { name: language[mat.NameTextMapHash] };
 				if(mat.MaterialType !== 'MATERIAL_AVATAR_MATERIAL') reward.count = parseInt(repre.Count);
+				if((getLanguage('EN')[mat.TypeDescTextMapHash]).includes('Weapon')) {
+					data.domaintype = language[getDomainTypeTextMapHash(domainType.UI_ABYSSUS_WEAPON_PROMOTE)];
+				} else {
+					data.domaintype = language[getDomainTypeTextMapHash(domainType.UI_ABYSSUS_AVATAR_PROUD)];
+				}
 				return reward;
 			} else { // is artifact
 				let disp = xdisplay.find(d => d.Id === repre.Id);
+				data.domaintype = language[getDomainTypeTextMapHash(domainType.UI_ABYSSUS_RELIC)];
 				return { name: language[disp.NameTextMapHash], rarity: disp.RankLevel+'' };
 			}
 		});
-		data.disorder = xdisorder.filter(d => d.Id+'' === Object.keys(obj.LevelConfigMap)[0]).map(d => language[d.DescTextMapHash]);
+		// data.disorder = xdisorder.filter(d => d.Id+'' === Object.keys(obj.LevelConfigMap)[0]).map(d => language[d.DescTextMapHash]);
 
 		let filename = makeFileName(getLanguage('EN')[obj.NameTextMapHash]);
 		if(filename === '') return accum;
