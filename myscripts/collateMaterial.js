@@ -5,8 +5,8 @@ MATERIAL_AVATAR_MATERIAL is talent level-up material, etc.
 
 const filter = ['MATERIAL_EXCHANGE', 'MATERIAL_WOOD', 'MATERIAL_AVATAR_MATERIAL'];
 
-// Mora, Apple, Sunsettia
-const includeMatId = [202, 100001, 100002];
+// Adventure EXP, Mora, Companionship EXP, Apple, Sunsettia
+const includeMatId = [102, 202, 105, 100001, 100002];
 // Crafted Items, Primordial Essence, Raw Meat (S), Fowl (S)
 const excludeMatId = [110000, 112001, 100086, 100087];
 
@@ -35,7 +35,7 @@ function collateMaterial(lang) {
 		let dungeonlist = tmp.DungeonList.filter(ele => ele !== 0);
 		if(dungeonlist > 0) {
 			if(dungeonlist.length > 1) console.log(`${data.name} drops from more than one dungeon!`);
-			data.dropdomain = language[xdungeon.find(ele => ele.Id === dungeonlist[0]).DisplayNameTextMapHash];
+			data.dropdomain = language[xdungeon.find(ele => ele.Id === dungeonlist[0]).DisplayNameTextMapHash]; // artifact domains don't have DisplayNameTextMapHash
 			data.daysofweek = getDayWeekList(dungeonlist[0], language); 
 		}
 		data.source = tmp.TextList.map(ele => language[ele]).filter(ele => ele !== '');

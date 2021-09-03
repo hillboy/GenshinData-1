@@ -103,11 +103,13 @@ function exportData(folder, collateFunc, englishonly, skipwrite) {
 // exportCurve('characters', 'AvatarCurveExcelConfigData');
 // exportData('constellations', require('./collateConstellation'));
 // exportData('talents', require('./collateTalent.js'));
-exportData('weapons', require('./collateWeapon.js'));
+// exportData('weapons', require('./collateWeapon.js'));
 // exportCurve('weapons', 'WeaponCurveExcelConfigData')
 // exportData('artifacts', require('./collateArtifact.js'));
 // exportData('foods', require('./collateFood'));
 // exportData('materials', require('./collateMaterial'));
+exportData('domains', require('./collateDomain'));
+
 
 //console.log(collateCharacter('EN'))
 //console.log(collateConstellation('EN').hutao)
