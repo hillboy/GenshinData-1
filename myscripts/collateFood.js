@@ -58,6 +58,7 @@ function collateFood(lang) {
 			return accum;
 		}, []);
 		// data.source = 
+		data.imagename = obj.Icon;
 
 		accum[makeFileName(getLanguage('EN')[obj.NameTextMapHash])] = data;
 
@@ -86,6 +87,7 @@ function collateFood(lang) {
 		spdata.character = language[getAvatar(myspec.AvatarId).NameTextMapHash];
 		
 		spdata.ingredients = ingredients;
+		spdata.imagename = xd.Icon;
 
 		accum[makeFileName(getLanguage('EN')[xd.NameTextMapHash])] = spdata;
 		return accum;

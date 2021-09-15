@@ -5,8 +5,8 @@ MATERIAL_AVATAR_MATERIAL is talent level-up material, etc.
 
 const filter = ['MATERIAL_EXCHANGE', 'MATERIAL_WOOD', 'MATERIAL_AVATAR_MATERIAL'];
 
-// Adventure EXP, Mora, Companionship EXP, Apple, Sunsettia
-const includeMatId = [102, 202, 105, 100001, 100002];
+// Adventure EXP, Mora, Primogems, Companionship EXP, Apple, Sunsettia
+const includeMatId = [102, 202, 201, 105, 100001, 100002];
 // Crafted Items, Primordial Essence, Raw Meat (S), Fowl (S)
 const excludeMatId = [110000, 112001, 100086, 100087];
 
@@ -39,6 +39,9 @@ function collateMaterial(lang) {
 			data.daysofweek = getDayWeekList(dungeonlist[0], language); 
 		}
 		data.source = tmp.TextList.map(ele => language[ele]).filter(ele => ele !== '');
+
+		data.imagename = obj.Icon;
+		if(!data.imagename) console.log(data.name+' has no icon');
 
 		let filename = makeFileName(getLanguage('EN')[obj.NameTextMapHash]);
 		if(filename === '') return accum;

@@ -109,7 +109,6 @@ function collateWeapon(lang) {
 		data.icon = obj.Icon;
 		data.awakenicon = obj.AwakenIcon;
 
-
 		accum[filename] = data;
 		return accum;
 	}, {});

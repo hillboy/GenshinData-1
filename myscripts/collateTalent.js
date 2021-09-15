@@ -28,7 +28,7 @@ function collateTalent(lang) {
 				if(filename === 'raidenshogun' && index === 2) return accum2; // skip hidden cannot cook passive
 				if(proud.ProudSkillGroupId) accum2.push(proud.ProudSkillGroupId);
 				return accum2;
-			}, [])
+			}, []);
 			let parameters = {};
 			let costs = {};
 			combat.forEach((skId, index) => {

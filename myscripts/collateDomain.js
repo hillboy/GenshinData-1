@@ -116,6 +116,7 @@ function collateDomain(lang) {
 			}
 		});
 		// data.disorder = xdisorder.filter(d => d.Id+'' === Object.keys(obj.LevelConfigMap)[0]).map(d => language[d.DescTextMapHash]);
+		data.imagename = obj.EntryPicPath;
 
 		let filename = makeFileName(getLanguage('EN')[obj.NameTextMapHash]);
 		if(filename === '') return accum;
