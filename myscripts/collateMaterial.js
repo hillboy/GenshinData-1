@@ -3,31 +3,45 @@ MATERIAL_AVATAR_MATERIAL is talent level-up material, etc.
 
 */
 
-const filter = ['MATERIAL_EXCHANGE', 'MATERIAL_WOOD', 'MATERIAL_AVATAR_MATERIAL'];
+const filter = ['MATERIAL_EXCHANGE', 'MATERIAL_WOOD', 'MATERIAL_AVATAR_MATERIAL', 'MATERIAL_EXP_FRUIT'];
 
 // Adventure EXP, Mora, Primogems, Companionship EXP, Apple, Sunsettia
 const includeMatId = [102, 202, 201, 105, 100001, 100002];
 // Crafted Items, Primordial Essence, Raw Meat (S), Fowl (S)
 const excludeMatId = [110000, 112001, 100086, 100087];
 
+function sortMaterials(mata, matb) {
+	if(mata.Rank < matb.Rank) return -1;
+	if(mata.Rank > matb.Rank) return 1;
+	if(mata.Id < matb.Id) return -1;
+	if(mata.Id > matb.Id) return 1;
+	return 0;
+}
+
 function collateMaterial(lang) {
 	const language = getLanguage(lang);
 	const xsource = getExcel('MaterialSourceDataExcelConfigData');
-	const xmat = getExcel('MaterialExcelConfigData');
+	const xmat = getExcel('MaterialExcelConfigData').sort(sortMaterials);
 	const xarchive = getExcel('MaterialCodexExcelConfigData');
 	const xdungeon = getExcel('DungeonExcelConfigData');
 
+	let sortOrder = 0;
+
 	let mymaterial = xmat.reduce((accum, obj) => {
-		if(!obj.MaterialType) return accum;
-		if(excludeMatId.includes(obj.Id)) return accum;
-		if(!filter.includes(obj.MaterialType) && !includeMatId.includes(obj.Id)) return accum;
+		sortOrder++;
+		if(!includeMatId.includes(obj.Id)) {
+			if(!obj.MaterialType) return accum;
+			if(excludeMatId.includes(obj.Id)) return accum;
+			if(!filter.includes(obj.MaterialType)) return accum;
+		}
 
 		let data = {};
+		data.Id = obj.Id;
 		data.name = language[obj.NameTextMapHash];
 		if(data.name === '') return accum;
-		// data.Id = obj.Id;
+		data.sortorder = sortOrder;
 		data.description = language[obj.DescTextMapHash];
-		data.category = obj.MaterialType.slice(9);
+		data.category = obj.MaterialType ? obj.MaterialType.slice(9) : obj.ItemType;
 		data.materialtype = language[obj.TypeDescTextMapHash];
 		if(obj.RankLevel) data.rarity = ''+obj.RankLevel;
 

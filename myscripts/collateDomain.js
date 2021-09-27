@@ -83,12 +83,13 @@ function collateDomain(lang) {
 		if(isSundaySpecial(getLanguage('EN')[obj.NameTextMapHash])) return accum;
 		// console.log(obj.Id);
 		let data = {};
-		// data.Id = obj.Id;
+		data.Id = obj.Id;
 		data.name = language[obj.NameTextMapHash];
 		// data.displayname = language[obj.DisplayNameTextMapHash]; // doesn't exist for artifact domains
 		data.domainentrance = language[getDomainEntranceTextMapHash(getLanguage('EN')[obj.NameTextMapHash])];// obj.EntryPicPath;
 		data.description = language[obj.DescTextMapHash];
 
+		if(obj.Id === 5120 || obj.Id === 5121 || obj.Id === 5122 || obj.Id === 5123) obj.CityID = 1; // Peak of Vindagnyr region fix from Liyue to Mondstadt
 		data.region = language[xcity.find(city => city.CityId === obj.CityID).CityNameTextMapHash];
 
 		data.recommendedlevel = obj.ShowLevel;
