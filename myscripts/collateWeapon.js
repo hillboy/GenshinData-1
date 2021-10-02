@@ -21,7 +21,7 @@ function collateWeapon(lang) {
 		if(accum[filename] !== undefined) console.log(filename+' IS NOT UNIQUE');
 
 		data.name = language[obj.NameTextMapHash];
-		data.description = language[obj.DescTextMapHash];
+		data.description = sanitizeDescription(language[obj.DescTextMapHash]);
 		data.weapontype = language[weaponTextMapHash[obj.WeaponType]];
 		data.rarity = ''+obj.RankLevel;
 
@@ -42,7 +42,8 @@ function collateWeapon(lang) {
 				if(ref === undefined) break;
 				if(offset === 0) data.effectname = language[ref.NameTextMapHash];
 				let effect = language[ref.DescTextMapHash];
-				if(filename === 'swordofdescension') { // has extra color
+				effect = effect.replace(/<\/color>s/g, 's<\/color>');
+				if(filename === 'swordofdescension' || filename === 'predator') { // has extra color
 					effect = effect.replace(/<color=#.*?>/i, '').replace(/<\/color>/i, '');
 					effect = effect.replace(/<color=#.*?>/i, '').replace(/<\/color>/i, '');
 				}
@@ -50,14 +51,14 @@ function collateWeapon(lang) {
 				effect = effect.replace(/<color=#.*?>/gi, '{').replace(/<\/color>/gi, '}');
 				effect = effect.split(/{|}/);
 				data['r'+(offset+1)] = [];
-				data['effect'] = effect.reduce((accum, ele, i) => {
+				data['effect'] = sanitizeDescription(effect.reduce((accum, ele, i) => {
 					if(i % 2 === 0) {
 						return accum + ele;
 					} else {
 						data['r'+(offset+1)].push(ele);
 						return accum + `{${(i-1)/2}}`;
 					}
-				}, '');
+				}, ''));
 			}
 		}
 

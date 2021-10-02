@@ -87,7 +87,7 @@ function collateDomain(lang) {
 		data.name = language[obj.NameTextMapHash];
 		// data.displayname = language[obj.DisplayNameTextMapHash]; // doesn't exist for artifact domains
 		data.domainentrance = language[getDomainEntranceTextMapHash(getLanguage('EN')[obj.NameTextMapHash])];// obj.EntryPicPath;
-		data.description = language[obj.DescTextMapHash];
+		data.description = sanitizeDescription(language[obj.DescTextMapHash]);
 
 		if(obj.Id === 5120 || obj.Id === 5121 || obj.Id === 5122 || obj.Id === 5123) obj.CityID = 1; // Peak of Vindagnyr region fix from Liyue to Mondstadt
 		data.region = language[xcity.find(city => city.CityId === obj.CityID).CityNameTextMapHash];

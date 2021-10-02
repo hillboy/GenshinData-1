@@ -40,7 +40,7 @@ function collateMaterial(lang) {
 		data.name = language[obj.NameTextMapHash];
 		if(data.name === '') return accum;
 		data.sortorder = sortOrder;
-		data.description = language[obj.DescTextMapHash];
+		data.description = sanitizeDescription(language[obj.DescTextMapHash]);
 		data.category = obj.MaterialType ? obj.MaterialType.slice(9) : obj.ItemType;
 		data.materialtype = language[obj.TypeDescTextMapHash];
 		if(obj.RankLevel) data.rarity = ''+obj.RankLevel;

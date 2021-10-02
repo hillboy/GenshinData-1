@@ -41,7 +41,7 @@ function collateEnemy(lang) {
 		data.Id = obj.Id;
 
 
-
+		data.NameTextMapHash = des.NameTextMapHash;
 		data.name = language[des.NameTextMapHash];
 		data.specialname = language[spe.SpecialNameTextMapHash];
 

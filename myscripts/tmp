@@ -1,0 +1,29 @@
+energydrops: [
+	{
+		trigger: {
+			type: "hppercent",
+			value: 66,
+		},
+		particles: [
+			{
+				element: "PYRO",
+				type: "PARTICLE"
+			}
+		]
+	},
+	{
+		trigger: {
+			type: "kill"
+		},
+		particles: [
+			{
+				element: "COMMON",
+				type: "PARTICLE"
+			},
+			{
+				element: "COMMON",
+				type: "ORB"
+			}
+		]
+	},
+]
