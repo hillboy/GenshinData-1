@@ -48,7 +48,7 @@ function collateEnemy(lang) {
 		let sub = obj.SubType || 'CODEX_SUBTYPE_ELEMENTAL';
 		sub = sub.slice(sub.lastIndexOf('_')+1);
 		sub = xmanualtext.find(m => m.TextMapId === `UI_CODEX_ANIMAL_CATEGORY_${sub}`).TextMapContentTextMapHash;
-		data.type = mon.SecurityLevel || 'COMMON';
+		data.enemytype = mon.SecurityLevel || 'COMMON';
 		data.category = language[sub];
 		data.imageicon = des.Icon;
 		data.description = sanitizeDescription(language[obj.DescTextMapHash]);
@@ -57,6 +57,7 @@ function collateEnemy(lang) {
 		data.bgm = mon.CombatBGMLevel;
 		data.budget = mon.EntityBudgetLevel;
 
+		// particle drops
 		let drops = [];
 		for(let x of mon.HpDrops) {
 			if(x.DropId) drops.push(x.DropId);

@@ -110,7 +110,9 @@ function exportData(folder, collateFunc, englishonly, skipwrite) {
 // exportData('materials', require('./collateMaterial')); // run twice
 // exportData('domains', require('./collateDomain')); // run twice // remember to add back recommendedelements and disorder and entrypicpath
 // exportData('enemies', require('./collateEnemy'));
-exportData('domains', require('./collateDomainMonsterList')); // run only after both domains and enemies have run. sync
+// exportData('domains', require('./collateDomainMonsterList')); // run only after both domains and enemies have run. sync
+// exportCurve('enemies', 'MonsterCurveExcelConfigData');
+
 
 //console.log(collateCharacter('EN'))
 //console.log(collateConstellation('EN').hutao)

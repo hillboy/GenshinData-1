@@ -3,7 +3,7 @@ MATERIAL_AVATAR_MATERIAL is talent level-up material, etc.
 
 */
 
-const filter = ['MATERIAL_EXCHANGE', 'MATERIAL_WOOD', 'MATERIAL_AVATAR_MATERIAL', 'MATERIAL_EXP_FRUIT'];
+const filter = ['MATERIAL_EXCHANGE', 'MATERIAL_WOOD', 'MATERIAL_AVATAR_MATERIAL', 'MATERIAL_EXP_FRUIT', 'MATERIAL_WEAPON_EXP_STONE'];
 
 // Adventure EXP, Mora, Primogems, Companionship EXP, Apple, Sunsettia
 const includeMatId = [102, 202, 201, 105, 100001, 100002];

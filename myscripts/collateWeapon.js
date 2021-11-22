@@ -42,6 +42,7 @@ function collateWeapon(lang) {
 				if(ref === undefined) break;
 				if(offset === 0) data.effectname = language[ref.NameTextMapHash];
 				let effect = language[ref.DescTextMapHash];
+				effect = effect.replaceAll('{NON_BREAK_SPACE}', ' ');
 				effect = effect.replace(/<\/color>s/g, 's<\/color>');
 				if(filename === 'swordofdescension' || filename === 'predator') { // has extra color
 					effect = effect.replace(/<color=#.*?>/i, '').replace(/<\/color>/i, '');
@@ -54,6 +55,8 @@ function collateWeapon(lang) {
 				data['effect'] = sanitizeDescription(effect.reduce((accum, ele, i) => {
 					if(i % 2 === 0) {
 						return accum + ele;
+					} else if(ele.includes('#')) {
+						return accum + `{${ele}}`;
 					} else {
 						data['r'+(offset+1)].push(ele);
 						return accum + `{${(i-1)/2}}`;
