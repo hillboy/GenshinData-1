@@ -27,6 +27,7 @@ function collateFood(lang) {
 		let data = {};
 
 		data.name = language[obj.NameTextMapHash];
+		data.Id = obj.Id;
 		data.rarity = obj.RankLevel;
 		data.foodtype = 'NORMAL';
 		data.foodfilter = language[getManualTextMapHash(obj.FoodType)];

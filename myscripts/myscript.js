@@ -31,7 +31,7 @@ global.makeFileName = function(str, lang) { return normalizeStr(str).toLowerCase
 global.convertBold = function(str) { return str.replace(/<color=#FFD780FF>(.*?)<\/color>/gi, '**$1**'); }
 global.stripHTML = function(str) { return (str || '').replace(/(<([^>]+)>)/gi, ''); }
 global.capitalizeFirst = function(str) { return str[0].toUpperCase() + str.toLowerCase().slice(1); }
-global.replaceLayout = function(str) { return str.replace(/{LAYOUT_MOBILE#.*?}{LAYOUT_PC#(.*?)}{LAYOUT_PS#.*?}/gi,'$1').replace('#',''); }
+global.replaceLayout = function(str) { return str.replace(/{LAYOUT_MOBILE#.*?}{LAYOUT_PC#(.*?)}{LAYOUT_PS#.*?}/gi,'$1').replace('#','').replaceAll('{NON_BREAK_SPACE}', ' '); }
 global.replaceNewline = function(str) { return str.replace(/\\n/gi, '\n'); }
 global.sanitizeDescription = function(str) { return replaceNewline(replaceLayout(stripHTML(convertBold(str)))); }
 /* ======================================================================================= */
@@ -109,7 +109,7 @@ function exportData(folder, collateFunc, englishonly, skipwrite) {
 // exportData('foods', require('./collateFood'));
 // exportData('materials', require('./collateMaterial')); // run twice
 // exportData('domains', require('./collateDomain')); // run twice // remember to add back recommendedelements and disorder and entrypicpath
-// exportData('enemies', require('./collateEnemy'));
+exportData('enemies', require('./collateEnemy'), true);
 // exportData('domains', require('./collateDomainMonsterList')); // run only after both domains and enemies have run. sync
 // exportCurve('enemies', 'MonsterCurveExcelConfigData');
 

@@ -3,12 +3,15 @@ MATERIAL_AVATAR_MATERIAL is talent level-up material, etc.
 
 */
 
-const filter = ['MATERIAL_EXCHANGE', 'MATERIAL_WOOD', 'MATERIAL_AVATAR_MATERIAL', 'MATERIAL_EXP_FRUIT', 'MATERIAL_WEAPON_EXP_STONE'];
+const filter = ['MATERIAL_EXCHANGE', 'MATERIAL_WOOD', 'MATERIAL_AVATAR_MATERIAL', 'MATERIAL_EXP_FRUIT',
+				'MATERIAL_WEAPON_EXP_STONE', 'MATERIAL_CONSUME', 'MATERIAL_FISH_BAIT', 'MATERIAL_FISH_ROD'];
 
 // Adventure EXP, Mora, Primogems, Companionship EXP, Apple, Sunsettia
 const includeMatId = [102, 202, 201, 105, 100001, 100002];
-// Crafted Items, Primordial Essence, Raw Meat (S), Fowl (S)
-const excludeMatId = [110000, 112001, 100086, 100087];
+// Crafted Items, Primordial Essence, Raw Meat (S), Fowl (S), Original Essence (Invalidated), Original Resin (Invalidated)
+// Scarlet Quartz, Scarlet Quartz, Test Stamina Growth Item, Test Temporary stamina Growth Item
+const excludeMatId = [110000, 112001, 100086, 100087, 210, 211,
+					  101005, 101007, 106000, 106001];
 
 function sortMaterials(mata, matb) {
 	if(mata.Rank < matb.Rank) return -1;
@@ -34,6 +37,10 @@ function collateMaterial(lang) {
 			if(excludeMatId.includes(obj.Id)) return accum;
 			if(!filter.includes(obj.MaterialType)) return accum;
 		}
+		if(obj.Icon === "UI_ItemIcon_109000") return accum; // skip recipes
+		else if(obj.Icon === "UI_ItemIcon_221003") return accum; // skip diagrams
+		else if(obj.Icon === "UI_ItemIcon_221035") return accum; // skip bait blueprint
+		else if(obj.Icon === "UI_ItemIcon_221001") return accum; // skip instruction blueprints
 
 		let data = {};
 		data.Id = obj.Id;

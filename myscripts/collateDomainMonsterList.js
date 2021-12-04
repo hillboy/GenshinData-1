@@ -48,6 +48,11 @@ const monsterMap = {
 	"bless unyield iii": ['la py slime', 'blaz axe mita', 'rock shield mita'],
 	"bless unyield iv": ['geovish'],
 
+	"bless necropolis i": ['crack axe mita', 'la hy slime', 'hy slime'],
+	"bless necropolis ii": ['crack axe mita', 'la hy slime', 'hy slime', 'el hili shoot', 'hili berserk'],
+	"bless necropolis iii": ['thunder hound', 'thunder hound whelp', 'el hili shooter'],
+	"bless necropolis iv": ['thunder hound', 'thunder hound whelp', 'crack axe mita'],
+
 	"forge alt sand i": ['hy slime', 'la hy slime', 'py slime', 'la py slime'],
 	"forge alt sand ii": ['la hy slime', 'la py slime'],
 	"forge alt sand iii": ['la hy slime', 'la py slime', 'hy ab mage', 'py ab mage'],

@@ -7,7 +7,6 @@ const xcity = getExcel('CityConfigData');
 
 const xmonster = getExcel('MonsterExcelConfigData');
 const xcodex = getExcel('AnimalCodexExcelConfigData');
-const xinvest = getExcel('InvestigationMonsterConfigData');
 const xdescribe = getExcel('MonsterDescribeExcelConfigData');
 const xspecial = getExcel('MonsterSpecialNameExcelConfigData');
 
@@ -35,15 +34,53 @@ function collateEnemy(lang) {
 		let mon = xmonster.find(m => m.Id === obj.Id);
 		let des = xdescribe.find(d => d.Id === obj.DescribeId);
 		let spe = xspecial.find(s => s.SpecialNameLabID === des.SpecialNameLabID);
+		let inv = findInvestigation(obj.Id);
 		if(!spe) console.log('no special for '+obj.Id);
 
 		let data = {};
 		data.Id = obj.Id;
 
-
 		data.NameTextMapHash = des.NameTextMapHash;
 		data.name = language[des.NameTextMapHash];
 		data.specialname = language[spe.SpecialNameTextMapHash];
+		if(inv) {
+			data.investigation = {};
+			data.investigation.name = language[inv.NameTextMapHash];
+			data.investigation.category = language[xmanualtext.find(e => e.TextMapId === `INVESTIGATION_${inv.MonsterCategory.toUpperCase()}_MONSTER`).TextMapContentTextMapHash];
+			data.investigation.description = language[inv.DescTextMapHash];
+			if(language[inv.LockDescTextMapHash] !== "") data.investigation.lockdesc = language[inv.LockDescTextMapHash];
+			data.investigationicon = inv.Icon;
+			// REWARD PREVIEW
+			let rewardpreview = xpreview.find(pre => pre.Id === inv.RewardPreviewId).PreviewItems.filter(pre => pre.Id);
+			data.rewardpreview = mapRewardList(rewardpreview, language);
+		} else {
+			if(obj.Id === 20020101) { // Eye of the Storm
+				data.rewardpreview = mapRewardList(eyestormreward, language);
+			} else if(obj.Id === 21011501) { // Unusual Hilichurl
+				data.rewardpreview = mapRewardList(unusualreward, language);
+			} else if(obj.Id === 22030101 || obj.Id === 22020101 ||
+				      obj.Id === 26060201 || obj.Id === 26060101 || obj.Id === 26060301) {
+				// Abyss Lector: Violet Lightning, Abyss Herald: Wicked Torrents
+				// Hydro Cicin, Electro Cicin, Cryo Cicin
+				data.rewardpreview = [];
+			} else if(obj.Id === 29010101) { // dvalin lvl90
+				let rewardpreview = xpreview.find(pre => pre.Id === 15005).PreviewItems.filter(pre => pre.Id);
+				data.rewardpreview = mapRewardList(rewardpreview, language);
+			} else if(obj.Id === 29020101) { // wolfboss lvl90
+				let rewardpreview = xpreview.find(pre => pre.Id === 15010).PreviewItems.filter(pre => pre.Id);
+				data.rewardpreview = mapRewardList(rewardpreview, language);
+			} else if(obj.Id === 29030101) { // childe lvl90
+				let rewardpreview = xpreview.find(pre => pre.Id === 15014).PreviewItems.filter(pre => pre.Id);
+				data.rewardpreview = mapRewardList(rewardpreview, language);
+			} else if(obj.Id === 29040101) { // azhdaha lvl90
+				let rewardpreview = xpreview.find(pre => pre.Id === 15018).PreviewItems.filter(pre => pre.Id);
+				data.rewardpreview = mapRewardList(rewardpreview, language);
+			} else if(obj.Id === 29050101) { // signora lvl90
+				let rewardpreview = xpreview.find(pre => pre.Id === 15034).PreviewItems.filter(pre => pre.Id);
+				data.rewardpreview = mapRewardList(rewardpreview, language);
+			}
+		}
+		if(!data.rewardpreview) console.log('no reward list for '+data.name);
 
 		let sub = obj.SubType || 'CODEX_SUBTYPE_ELEMENTAL';
 		sub = sub.slice(sub.lastIndexOf('_')+1);
@@ -98,5 +135,80 @@ function collateEnemy(lang) {
 	}, {});
 	return mymonster;
 }
+
+function findInvestigation(monId) {
+	const xinvest = getExcel('InvestigationMonsterConfigData');
+	if(monId === 21011601) monId = 21010601; // Electro Hilichurl Grenadier
+	else if(monId === 21020701) monId = 21020101; // Crackling Axe Mitachurl
+	else if(monId === 21020801) monId = 21020401; // Thunderhelm Lawachurl
+	else if(monId === 21030601) monId = 21030101; // Electro Samachurl
+	else if(monId === 22010401) monId = 22010101; // Electro Abyss Mage
+	else if(monId === 26010301) monId = 26010201; // Electro Whopperflower
+	// Hydro Cicin
+	// Electro Cicin
+	// Cryo Cicin
+	// Stormterror
+	// Lupus Boreas, Dominator of Wolves
+	// Childe
+	// Azhdaha
+	// La Signora
+
+	return xinvest.find(i => i.MonsterIdList.includes(monId));
+}
+
+function mapRewardList(rewardlist, language) {
+	const xmat = getExcel('MaterialExcelConfigData');
+	const xdisplay = getExcel('DisplayItemExcelConfigData');
+	return rewardlist.map(repre => {
+		let mat = xmat.find(m => m.Id === repre.Id);
+		if(mat) { // is material
+			let reward = { name: language[mat.NameTextMapHash] };
+			if(repre.Count && repre.Count !== "") reward.count = parseFloat(repre.Count);
+			return reward;
+		} else { // is artifact
+			let disp = xdisplay.find(d => d.Id === repre.Id);
+			return { name: language[disp.NameTextMapHash], rarity: disp.RankLevel+'' };
+		}
+	});
+}
+
+const eyestormreward = [
+    {
+        "Id": 202
+    },
+    {
+        "Id": 400022
+    },
+    {
+        "Id": 400032
+    },
+    {
+        "Id": 400042
+    },
+    {
+        "Id": 400062
+    },
+    {
+        "Id": 400023
+    },
+    {
+        "Id": 400033
+    },
+    {
+        "Id": 400043
+    }
+];
+
+const unusualreward = [
+	{
+		"Id": 102 // Adventure EXP
+	},
+    {
+        "Id": 202 // Mora
+    },
+    {
+    	"Id": 100018// Cabbage
+    }
+]
 
 module.exports = collateEnemy;

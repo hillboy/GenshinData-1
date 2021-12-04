@@ -19,7 +19,7 @@ function collateCharacter(lang) {
 		data.name = language[obj.NameTextMapHash];
 		if(isPlayer(obj)) data.name = language[playerIdToTextMapHash[obj.Id]];
 		//if(data.name === 'Traveler') data.name = capitalizeFirst(avatarIdToFileName[obj.Id]);
-		data.description = language[obj.DescTextMapHash];
+		data.description = sanitizeDescription(language[obj.DescTextMapHash]);
 		data.weapontype = language[weaponTextMapHash[obj.WeaponType]];
 		data.body = obj.BodyType.slice(obj.BodyType.indexOf('BODY_')+5);
 		data.rarity = obj.QualityType === 'QUALITY_PURPLE' ? '4' : '5';

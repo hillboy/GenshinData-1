@@ -63,6 +63,8 @@ function getDomainEntranceTextMapHash(englishname) {
 		return mapping("UI_DUNGEON_ENTRY_310");
 	else if(englishname.includes('sunken sands') || englishname.includes('altar of sands') || englishname.includes('sand burial'))
 		return mapping("UI_DUNGEON_ENTRY_368");
+	else if(englishname.includes('necropolis'))
+		return mapping("UI_DUNGEON_ENTRY_433")
 	else
 		console.log('no domain entrance mapping found for '+englishname);
 }
