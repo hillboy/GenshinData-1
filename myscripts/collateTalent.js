@@ -36,11 +36,14 @@ function collateTalent(lang) {
 				let talent = xtalent.find(tal => tal.Id === skId);
 				let combatTypeProp = talentCombatTypeMap[index];
 				let ref = data[combatTypeProp] = {};
-				
+				ref.Id = talent.Id;
 				ref.name = language[talent.NameTextMapHash];
 				let desc = language[talent.DescTextMapHash].split('\\n\\n<i>'); // extract out the italicized part
 				ref.info = sanitizeDescription(desc[0]);
 				if(desc[1]) ref.description = sanitizeDescription(desc[1]);
+				ref.icon = talent.SkillIcon;
+				if(combatTypeProp === 'combat3')
+					ref.icon = ref.icon + '_HD';
 
 				ref.labels = [];
 				// build the labels
@@ -82,9 +85,10 @@ function collateTalent(lang) {
 			passive.forEach((skId, index) => {
 				let talent = xpassive.find(pas => pas.ProudSkillGroupId === skId);
 				let ref = data['passive'+(index+1)] = {}; // store reference in variable to make it easier to access
-
+				ref.Id = skId;
 				ref.name = language[talent.NameTextMapHash];
 				ref.info = sanitizeDescription(language[talent.DescTextMapHash]);
+				ref.icon = talent.Icon;
 			});
 			data.costs = costs;
 			data.parameters = parameters;

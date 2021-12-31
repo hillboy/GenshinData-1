@@ -17,7 +17,7 @@ function collateConstellation(lang) {
 			let stars = depot.Talents.map(talentId => xconstellation.find(ele => ele.TalentId === talentId));
 			for(let i = 1; i <= 6; i++) {
 				data['c'+i] = {
-					name: language[stars[i-1].NameTextMapHash],
+					name: sanitizeDescription(language[stars[i-1].NameTextMapHash]),
 					effect: sanitizeDescription(language[stars[i-1].DescTextMapHash])
 				};
 				data.images['c'+i] = `https://upload-os-bbs.mihoyo.com/game_record/genshin/constellation_icon/${stars[i-1].Icon}.png`;

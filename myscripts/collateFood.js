@@ -33,7 +33,7 @@ function collateFood(lang) {
 		data.foodfilter = language[getManualTextMapHash(obj.FoodType)];
 		data.foodcategory = undefined;
 		data.effect = obj.EffectDesc.reduce((accum, eff) => {
-			const tmp = stripHTML(language[eff]);
+			const tmp = replaceLayout(stripHTML(language[eff]));
 			if(tmp) accum.push(tmp);
 			return accum;
 		}, []).join('\n');
@@ -81,7 +81,7 @@ function collateFood(lang) {
 
 		if(language[xd.InteractionTitleTextMapHash]) console.log(`specialty ${obj.Id} has interaction`);
 		if(language[xd.SpecialDescTextMapHash]) console.log(`specialty ${obj.Id} has special`);
-		spdata.effect = language[xd.EffectDescTextMapHash];
+		spdata.effect = replaceLayout(language[xd.EffectDescTextMapHash]);
 		spdata.description = sanitizeDescription(language[xd.DescTextMapHash]);
 
 		spdata.basedish = basedish;

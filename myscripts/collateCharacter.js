@@ -18,6 +18,18 @@ function collateCharacter(lang) {
 
 		data.name = language[obj.NameTextMapHash];
 		if(isPlayer(obj)) data.name = language[playerIdToTextMapHash[obj.Id]];
+
+		data.fullname = data.name;
+		if(!isPlayer(obj)) {
+			let cardimgname = obj.IconName.slice(obj.IconName.lastIndexOf('_')+1);
+			cardimgname = `UI_AvatarIcon_${cardimgname}_Card`;
+			let charmat = xmat.find(ele => ele.Icon === cardimgname);
+			data.fullname = language[charmat.NameTextMapHash];
+		}
+
+		if(data.name !== data.fullname) console.log(`fullname diff ${lang}: ${data.name} | ${data.fullname}`);
+
+
 		//if(data.name === 'Traveler') data.name = capitalizeFirst(avatarIdToFileName[obj.Id]);
 		data.description = sanitizeDescription(language[obj.DescTextMapHash]);
 		data.weapontype = language[weaponTextMapHash[obj.WeaponType]];

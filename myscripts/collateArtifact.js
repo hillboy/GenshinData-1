@@ -32,6 +32,11 @@ function collateArtifact(lang) {
 			}
 		});
 
+		if(data.rarity.length === 0) {
+			if(lang === 'EN') console.log(`Artifact set: ${setname} not available`);
+			return accum;
+		}
+
 		data.images = {};
 		// relic pieces
 		obj.ContainsList.forEach(ele => {

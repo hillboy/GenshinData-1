@@ -28,6 +28,10 @@ function collateMaterial(lang) {
 	const xarchive = getExcel('MaterialCodexExcelConfigData');
 	const xdungeon = getExcel('DungeonExcelConfigData');
 
+	const xfish = getExcel('FishExcelConfigData');
+	const xstock = getExcel('FishStockExcelConfigData');
+	const xpool = getExcel('FishPoolExcelConfigData');
+
 	let sortOrder = 0;
 
 	let mymaterial = xmat.reduce((accum, obj) => {
@@ -59,6 +63,21 @@ function collateMaterial(lang) {
 			data.dropdomain = language[xdungeon.find(ele => ele.Id === dungeonlist[0]).DisplayNameTextMapHash]; // artifact domains don't have DisplayNameTextMapHash
 			data.daysofweek = getDayWeekList(dungeonlist[0], language); 
 		}
+		// get fishing locations
+		if(getLanguage('EN')[obj.TypeDescTextMapHash] === 'Fish') {
+			let fishId = xfish.find(ele => ele.ItemId === obj.Id).Id;
+			let stockIds = xstock.reduce((stockAccum, stockObj) => {
+				if(stockObj._fishWeight[fishId] !== undefined) stockAccum.push(stockObj.Id);
+				return stockAccum;
+			}, []);
+			data.fishinglocations = stockIds.reduce((poolAccum, stockId) => {
+				let pool = xpool.find(p => p._stockList.includes(stockId));
+				if(pool === undefined) return poolAccum;
+				if(!poolAccum.includes(language[pool._poolNameTextMapHash]))
+					poolAccum.push(language[pool._poolNameTextMapHash]);
+				return poolAccum;
+			}, []);
+		}
 		data.source = tmp.TextList.map(ele => language[ele]).filter(ele => ele !== '');
 
 		data.imagename = obj.Icon;
@@ -66,6 +85,7 @@ function collateMaterial(lang) {
 
 		let filename = makeFileName(getLanguage('EN')[obj.NameTextMapHash]);
 		if(filename === '') return accum;
+		if(filename.includes('shrineofdepthskey')) return accum;
 		accum[filename] = data;
 		return accum;
 	}, {});

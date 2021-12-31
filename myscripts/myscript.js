@@ -99,7 +99,7 @@ function exportData(folder, collateFunc, englishonly, skipwrite) {
 	console.log("done "+folder);
 }
 
-// exportData('characters', require('./collateCharacter.js'));
+exportData('characters', require('./collateCharacter.js'));
 // exportCurve('characters', 'AvatarCurveExcelConfigData');
 // exportData('constellations', require('./collateConstellation'));
 // exportData('talents', require('./collateTalent.js'));
@@ -109,10 +109,10 @@ function exportData(folder, collateFunc, englishonly, skipwrite) {
 // exportData('foods', require('./collateFood'));
 // exportData('materials', require('./collateMaterial')); // run twice
 // exportData('domains', require('./collateDomain')); // run twice // remember to add back recommendedelements and disorder and entrypicpath
-exportData('enemies', require('./collateEnemy'), true);
+// exportData('enemies', require('./collateEnemy'));
 // exportData('domains', require('./collateDomainMonsterList')); // run only after both domains and enemies have run. sync
 // exportCurve('enemies', 'MonsterCurveExcelConfigData');
-
+// // exportData('fishingpoints', require('./collateFishingPoint')); 
 
 //console.log(collateCharacter('EN'))
 //console.log(collateConstellation('EN').hutao)
