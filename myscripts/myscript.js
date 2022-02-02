@@ -23,7 +23,7 @@ const langcodes = ['CHS', 'CHT', 'DE', 'EN', 'ES', 'FR', 'ID', 'JP', 'KR', 'PT',
 // UNUSED object map that converts AvatarAssocType into a TextMapHash
 const assocTextMapHash = ['ASSOC_TYPE_MONDSTADT', 'ASSOC_TYPE_LIYUE', 'ASSOC_TYPE_FATUI'];
 
-global.isPlayer = function(data) { return data.CandSkillDepotIds.length !== 0; }
+global.isPlayer = function(data) { return data.CandSkillDepotIds && data.CandSkillDepotIds.length !== 0; }
 global.getPlayerElement = function(SkillDepotId) { let tmp = xskilldepot.find(ele => ele.Id === SkillDepotId); return tmp === undefined ? tmp : tmp.TalentStarName.split('_').pop(); }
 global.getLanguage = function(abbriev) { return getTextMap(abbriev.toUpperCase()); }
 global.normalizeStr = function(str) { return str.normalize('NFD').replace(/[\u0300-\u036f]/g, ''); }
@@ -33,7 +33,8 @@ global.stripHTML = function(str) { return (str || '').replace(/(<([^>]+)>)/gi, '
 global.capitalizeFirst = function(str) { return str[0].toUpperCase() + str.toLowerCase().slice(1); }
 global.replaceLayout = function(str) { return str.replace(/{LAYOUT_MOBILE#.*?}{LAYOUT_PC#(.*?)}{LAYOUT_PS#.*?}/gi,'$1').replace('#','').replaceAll('{NON_BREAK_SPACE}', ' '); }
 global.replaceNewline = function(str) { return str.replace(/\\n/gi, '\n'); }
-global.sanitizeDescription = function(str) { return replaceNewline(replaceLayout(stripHTML(convertBold(str)))); }
+global.sanitizeDescription = function(str) { return replaceNewline(replaceLayout(stripHTML(convertBold(str || '')))); }
+global.getMatSourceText = function(id, textmap) { return getExcel('MaterialSourceDataExcelConfigData').find(e => e.Id === id).TextList.map(e => textmap[e]).filter(e => e !== ''); }
 /* ======================================================================================= */
 
 // object map that converts the genshin coded element into a TextMapHash
@@ -99,7 +100,7 @@ function exportData(folder, collateFunc, englishonly, skipwrite) {
 	console.log("done "+folder);
 }
 
-exportData('characters', require('./collateCharacter.js'));
+// exportData('characters', require('./collateCharacter.js'));
 // exportCurve('characters', 'AvatarCurveExcelConfigData');
 // exportData('constellations', require('./collateConstellation'));
 // exportData('talents', require('./collateTalent.js'));
@@ -112,6 +113,15 @@ exportData('characters', require('./collateCharacter.js'));
 // exportData('enemies', require('./collateEnemy'));
 // exportData('domains', require('./collateDomainMonsterList')); // run only after both domains and enemies have run. sync
 // exportCurve('enemies', 'MonsterCurveExcelConfigData');
+
+// exportData('outfits', require('./collateOutfit'));
+// exportData('windgliders', require('./collateWindGlider'));
+exportData('animals', require('./collateAnimal'));
+// exportData('namecards', require('./collateNamecard'));
+// exportData('geographies', require('./collateGeography'));
+// exportData('achievements', require('./collateAchievement'));
+// exportData('achievementgroups', require('./collateAchievementGroup'));
+
 // // exportData('fishingpoints', require('./collateFishingPoint')); 
 
 //console.log(collateCharacter('EN'))

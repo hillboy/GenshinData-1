@@ -58,9 +58,9 @@ function collateEnemy(lang) {
 				data.rewardpreview = mapRewardList(eyestormreward, language);
 			} else if(obj.Id === 21011501) { // Unusual Hilichurl
 				data.rewardpreview = mapRewardList(unusualreward, language);
-			} else if(obj.Id === 22030101 || obj.Id === 22020101 ||
+			} else if(obj.Id === 22030101 || obj.Id === 22020101 || obj.Id === 22030201 ||
 				      obj.Id === 26060201 || obj.Id === 26060101 || obj.Id === 26060301) {
-				// Abyss Lector: Violet Lightning, Abyss Herald: Wicked Torrents
+				// Abyss Lector: Violet Lightning, Abyss Herald: Wicked Torrents, Abyss Lector: Fathomless Flames
 				// Hydro Cicin, Electro Cicin, Cryo Cicin
 				data.rewardpreview = [];
 			} else if(obj.Id === 29010101) { // dvalin lvl90
@@ -77,6 +77,9 @@ function collateEnemy(lang) {
 				data.rewardpreview = mapRewardList(rewardpreview, language);
 			} else if(obj.Id === 29050101) { // signora lvl90
 				let rewardpreview = xpreview.find(pre => pre.Id === 15034).PreviewItems.filter(pre => pre.Id);
+				data.rewardpreview = mapRewardList(rewardpreview, language);
+			} else if(obj.Id === 26050801) {
+				let rewardpreview = xpreview.find(pre => pre.Id === 15177).PreviewItems.filter(pre => pre.Id);
 				data.rewardpreview = mapRewardList(rewardpreview, language);
 			}
 		}
@@ -144,6 +147,10 @@ function findInvestigation(monId) {
 	else if(monId === 21030601) monId = 21030101; // Electro Samachurl
 	else if(monId === 22010401) monId = 22010101; // Electro Abyss Mage
 	else if(monId === 26010301) monId = 26010201; // Electro Whopperflower
+	else if(monId === 20060601) monId = 20060201; // Pyro Specter
+	else if(monId === 20060501) monId = 20060201; // Electro Specter
+	else if(monId === 20060401) monId = 20060201; // Cryo Specter
+
 	// Hydro Cicin
 	// Electro Cicin
 	// Cryo Cicin
@@ -210,5 +217,19 @@ const unusualreward = [
     	"Id": 100018// Cabbage
     }
 ]
+
+
+function fixAnimalCodexSubType() {
+	const fs = require('fs');
+	let obfu = require('../[Obfuscated] ExcelBinOutput/AnimalCodexExcelConfigData.json');
+	let out = require('../ExcelBinOutput/AnimalCodexExcelConfigData.json');
+	for(let ob of obfu) {
+		let match = out.find(ele => ele.Id === ob.ODDLMOCCOPN);
+		match.SubType = ob.JOKMGBKIIKJ;
+	}
+	out = JSON.stringify(out, null, '\t');
+	fs.writeFileSync('../ExcelBinOutput/AnimalCodexExcelConfigData.json', out);
+}
+fixAnimalCodexSubType();
 
 module.exports = collateEnemy;

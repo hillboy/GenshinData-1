@@ -7,7 +7,9 @@ const xmat = getExcel('MaterialExcelConfigData');
 const xplayableWeapon = xweapon.filter(obj => {
 	if(obj.RankLevel >= 3 && obj.SkillAffix[0] === 0) return false;
 	if(obj.SkillAffix[1] !== 0) { console.log('danger'); return false };
-	if(getLanguage('EN')[obj.NameTextMapHash] === '') return false;
+	const name = getLanguage('EN')[obj.NameTextMapHash];
+	if(name === '') return false;
+	else if(name === 'The Flagstaff' || name === 'Quartz' || name === 'Ebony Bow' || name === 'Amber Bead') return false;
 	return true;
 });
 
