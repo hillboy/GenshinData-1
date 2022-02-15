@@ -8,6 +8,7 @@ function collateAnimal(lang) {
 	const language = getLanguage(lang);
 	let mydata = xcodex.reduce((accum, obj) => {
 		if(obj.Type === 'CODEX_MONSTER') return accum;
+		if(obj.IsDeleteWatcherAfterFinish) return accum;
 		let data = {};
 		data.Id = obj.Id;
 

@@ -19,6 +19,7 @@ function collateWeapon(lang) {
 	let myweapon = xplayableWeapon.reduce((accum, obj) => {
 
 		let data = {};
+		data.Id = obj.Id;
 		let filename = makeFileName(getLanguage('EN')[obj.NameTextMapHash]);
 		if(accum[filename] !== undefined) console.log(filename+' IS NOT UNIQUE');
 

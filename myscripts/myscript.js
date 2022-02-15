@@ -116,11 +116,12 @@ function exportData(folder, collateFunc, englishonly, skipwrite) {
 
 // exportData('outfits', require('./collateOutfit'));
 // exportData('windgliders', require('./collateWindGlider'));
-exportData('animals', require('./collateAnimal'));
+// exportData('animals', require('./collateAnimal'));
 // exportData('namecards', require('./collateNamecard'));
 // exportData('geographies', require('./collateGeography'));
 // exportData('achievements', require('./collateAchievement'));
 // exportData('achievementgroups', require('./collateAchievementGroup'));
+exportData('commissions', require('./collateCommission'), true);
 
 // // exportData('fishingpoints', require('./collateFishingPoint')); 
 
