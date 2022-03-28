@@ -19,7 +19,7 @@ UI_CODEX_ANIMAL_CATEGORY_HILICHURL
 function round(number, decimalplaces) {
 	let mult = Math.pow(10, decimalplaces);
 	let out = Math.round(number * mult) / mult;
-	if(out === null) console.log('enemy null resistance rounding');
+if(out === null) console.log('enemy null resistance rounding');
 	return out;
 }
 
@@ -81,12 +81,19 @@ function collateEnemy(lang) {
 			} else if(obj.Id === 26050801) {
 				let rewardpreview = xpreview.find(pre => pre.Id === 15177).PreviewItems.filter(pre => pre.Id);
 				data.rewardpreview = mapRewardList(rewardpreview, language);
+			} else if(obj.Id === 29060201) { // raiden shogun lvl90
+				let rewardpreview = xpreview.find(pre => pre.Id === 15038).PreviewItems.filter(pre => pre.Id);
+				data.rewardpreview = mapRewardList(rewardpreview, language);
 			}
 		}
-		if(!data.rewardpreview) console.log('no reward list for '+data.name);
+		if(!data.rewardpreview) {
+			console.log('no reward list for '+data.name); 
+			data.rewardpreview = [];
+		}
 
 		let sub = obj.SubType || 'CODEX_SUBTYPE_ELEMENTAL';
 		sub = sub.slice(sub.lastIndexOf('_')+1);
+		// console.log(sub);
 		sub = xmanualtext.find(m => m.TextMapId === `UI_CODEX_ANIMAL_CATEGORY_${sub}`).TextMapContentTextMapHash;
 		data.enemytype = mon.SecurityLevel || 'COMMON';
 		data.category = language[sub];
@@ -150,6 +157,7 @@ function findInvestigation(monId) {
 	else if(monId === 20060601) monId = 20060201; // Pyro Specter
 	else if(monId === 20060501) monId = 20060201; // Electro Specter
 	else if(monId === 20060401) monId = 20060201; // Cryo Specter
+	// else if
 
 	// Hydro Cicin
 	// Electro Cicin
@@ -219,17 +227,33 @@ const unusualreward = [
 ]
 
 
+// use id: 21010101
 function fixAnimalCodexSubType() {
 	const fs = require('fs');
 	let obfu = require('../[Obfuscated] ExcelBinOutput/AnimalCodexExcelConfigData.json');
 	let out = require('../ExcelBinOutput/AnimalCodexExcelConfigData.json');
 	for(let ob of obfu) {
-		let match = out.find(ele => ele.Id === ob.ODDLMOCCOPN);
-		match.SubType = ob.JOKMGBKIIKJ;
+		let match = out.find(ele => ele.Id === ob.KABAHENDGOO); // replace with ID
+		match.SubType = ob.JKOLEMPKHMI; // replace with CODEX_SUBTYPE_HILICHURL
 	}
 	out = JSON.stringify(out, null, '\t');
 	fs.writeFileSync('../ExcelBinOutput/AnimalCodexExcelConfigData.json', out);
 }
 fixAnimalCodexSubType();
+
+function fixInvestigationMonsterList() {
+	const fs = require('fs');
+	let obfu = require('../[Obfuscated] ExcelBinOutput/InvestigationMonsterConfigData.json');
+	let out = require('../ExcelBinOutput/InvestigationMonsterConfigData.json');
+
+	for(let ob of obfu) {
+		let match = out.find(ele => ele.Id === ob.JNAAGOAENLE); // replace with ID
+		match.MonsterIdList = ob.ENEMLKMDNFJ; // replace with CODEX_SUBTYPE_HILICHURL
+	}
+
+	out = JSON.stringify(out, null, '\t');
+	fs.writeFileSync('../ExcelBinOutput/InvestigationMonsterConfigData.json', out);
+}
+fixInvestigationMonsterList();
 
 module.exports = collateEnemy;

@@ -92,6 +92,10 @@ function collateDomain(lang) {
 		data.description = sanitizeDescription(language[obj.DescTextMapHash]);
 
 		if(obj.Id === 5120 || obj.Id === 5121 || obj.Id === 5122 || obj.Id === 5123) obj.CityID = 1; // Peak of Vindagnyr region fix from Liyue to Mondstadt
+		if(obj.Id >= 5258 && obj.Id <= 5265) obj.CityID = 2; // Taishan Mansion in Liyue
+		if(obj.Id >= 5214 && obj.Id <= 5225) obj.CityID = 2; // Hidden Palace of Lianshan Formula in Liyue
+		if(obj.Id >= 5200 && obj.Id <= 5207) obj.CityID = 3; // Slumbering Court in Inazuma, and Momiji-Dyed Court
+
 		data.region = language[xcity.find(city => city.CityId === obj.CityID).CityNameTextMapHash];
 
 		data.recommendedlevel = obj.ShowLevel;

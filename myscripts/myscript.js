@@ -109,19 +109,19 @@ function exportData(folder, collateFunc, englishonly, skipwrite) {
 // exportData('artifacts', require('./collateArtifact.js'));
 // exportData('foods', require('./collateFood'));
 // exportData('materials', require('./collateMaterial')); // run twice
-// exportData('domains', require('./collateDomain')); // run twice // remember to add back recommendedelements and disorder and entrypicpath
+exportData('domains', require('./collateDomain')); // run twice // remember to add back recommendedelements and disorder and entrypicpath
 // exportData('enemies', require('./collateEnemy'));
-// exportData('domains', require('./collateDomainMonsterList')); // run only after both domains and enemies have run. sync
+// exportData('domains', require('./collateDomainMonsterList')); // run only after both domains and enemies have run. sync. must do after domain
 // exportCurve('enemies', 'MonsterCurveExcelConfigData');
 
 // exportData('outfits', require('./collateOutfit'));
 // exportData('windgliders', require('./collateWindGlider'));
 // exportData('animals', require('./collateAnimal'));
-// exportData('namecards', require('./collateNamecard'));
-// exportData('geographies', require('./collateGeography'));
+// exportData('namecards', require('./collateNamecard')); // not done
+// exportData('geographies', require('./collateGeography')); // not done
 // exportData('achievements', require('./collateAchievement'));
 // exportData('achievementgroups', require('./collateAchievementGroup'));
-exportData('commissions', require('./collateCommission'), true);
+// exportData('commissions', require('./collateCommission'), true);
 
 // // exportData('fishingpoints', require('./collateFishingPoint')); 
 

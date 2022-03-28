@@ -3,10 +3,11 @@ const xsource = getExcel('MaterialSourceDataExcelConfigData');
 const xcostume = getExcel('AvatarCostumeExcelConfigData');
 const xavatar = getExcel('AvatarExcelConfigData');
 
+// for AvatarCostumeExcelConfigData
 const propertyMap = {
-	Id: 'BBMGPIGONBN',
-	AvatarId: 'PIFBBDBABNO',
-	IconName: 'JBHPBOFFFNN'
+	Id: 'KBBEOGFDOOL',
+	AvatarId: 'LDPMEMMAELP', // 10000003
+	IconName: 'BBPJLOILMEA' // UI_AvatarIcon_QinCostumeSea
 }
 
 // taken from collateCharacter.js
