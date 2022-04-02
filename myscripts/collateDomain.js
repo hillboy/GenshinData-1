@@ -1,4 +1,4 @@
-const xdungeon = getExcel('DungeonExcelConfigData');
+let xdungeon = getExcel('DungeonExcelConfigData');
 const xpreview = getExcel('RewardPreviewExcelConfigData');
 const xdungeonentry = getExcel('DungeonEntryExcelConfigData'); // adventure handbook
 const xdisplay = getExcel('DisplayItemExcelConfigData');
@@ -30,6 +30,8 @@ function getDomainTypeTextMapHash(domaintype) {
 "UI_DUNGEON_ENTRY_361", // "Momiji-Dyed Court"
 "UI_DUNGEON_ENTRY_310", // "Violet Court"
 "UI_DUNGEON_ENTRY_368", // "Court of Flowing Sand"
+"UI_DUNGEON_ENTRY_433", // "Slumbering Court"
+"UI_DUNGEON_ENTRY_516", // "The Lost Valley"
 */
 function getDomainEntranceTextMapHash(englishname) {
 	englishname = englishname.toLowerCase();
@@ -64,7 +66,9 @@ function getDomainEntranceTextMapHash(englishname) {
 	else if(englishname.includes('sunken sands') || englishname.includes('altar of sands') || englishname.includes('sand burial'))
 		return mapping("UI_DUNGEON_ENTRY_368");
 	else if(englishname.includes('necropolis'))
-		return mapping("UI_DUNGEON_ENTRY_433")
+		return mapping("UI_DUNGEON_ENTRY_433");
+	else if(englishname.includes('machine nest'))
+		return mapping("UI_DUNGEON_ENTRY_516");
 	else
 		console.log('no domain entrance mapping found for '+englishname);
 }
@@ -79,7 +83,7 @@ function isSundaySpecial(englishname) {
 function collateDomain(lang) {
 	const language = getLanguage(lang);
 	const xmat = getExcel('MaterialExcelConfigData');
-
+	xdungeon = moredungeons.concat(xdungeon);
 	let mydomain = xdungeon.reduce((accum, obj) => {
 		if(obj.Type !== "DUNGEON_DAILY_FIGHT" || obj.StateType !== "DUNGEON_STATE_RELEASE") return accum;
 		if(isSundaySpecial(getLanguage('EN')[obj.NameTextMapHash])) return accum;
@@ -99,7 +103,8 @@ function collateDomain(lang) {
 		data.region = language[xcity.find(city => city.CityId === obj.CityID).CityNameTextMapHash];
 
 		data.recommendedlevel = obj.ShowLevel;
-		// data.recommendedelements = obj.RecommendElementTypes.filter(ele => ele !== 'None').map(ele => language[xmanualtext.find(man => man.TextMapId === ele).TextMapContentTextMapHash]);
+		if(typeof obj.RecommendElementTypes[0] === 'string')
+			data.recommendedelements = obj.RecommendElementTypes.filter(ele => ele !== 'None').map(ele => language[xmanualtext.find(man => man.TextMapId === ele).TextMapContentTextMapHash]);
 		data.daysofweek = getDayWeekList(obj.Id, language);
 		if(data.daysofweek.length === 0) delete data.daysofweek;
 
@@ -122,7 +127,8 @@ function collateDomain(lang) {
 				return { name: language[disp.NameTextMapHash], rarity: disp.RankLevel+'' };
 			}
 		});
-		// data.disorder = xdisorder.filter(d => d.Id+'' === Object.keys(obj.LevelConfigMap)[0]).map(d => language[d.DescTextMapHash]);
+		if(obj.disorderoverride) data.disorder = language[obj.disorderoverride];
+		//data.disorder = xdisorder.filter(d => d.Id+'' === Object.keys(obj.LevelConfigMap)[0]).map(d => language[d.DescTextMapHash]);
 		data.imagename = obj.EntryPicPath;
 
 		let filename = makeFileName(getLanguage('EN')[obj.NameTextMapHash]);
@@ -158,3 +164,64 @@ function cleanupDungeonFile() {
 }
 
 cleanupDungeonFile();
+
+// Fire, Water, Ice, Rock, Electric, Wind, Grass
+
+let moredungeons = [
+{ // machine nest 1
+	Id: 99991,
+	Type: "DUNGEON_DAILY_FIGHT",
+	StateType: "DUNGEON_STATE_RELEASE",
+	NameTextMapHash: 4233644080,
+	DescTextMapHash: 1269716077,
+	CityID: 2,
+	ShowLevel: 59,
+	RecommendElementTypes: ['Fire', 'Electric', 'Rock', 'Wind'],
+	LimitLevel: 30,
+	PassRewardPreviewID: 22443,
+	EntryPicPath: 'UI_DungeonPic_CycleDungeonChasm',
+	disorderoverride: 4145618250
+},
+{ // machine nest 2
+	Id: 99992,
+	Type: "DUNGEON_DAILY_FIGHT",
+	StateType: "DUNGEON_STATE_RELEASE",
+	NameTextMapHash: 1948966872,
+	DescTextMapHash: 1269716077,
+	CityID: 2,
+	ShowLevel: 59,
+	RecommendElementTypes: ['Fire', 'Electric', 'Rock', 'Wind'],
+	LimitLevel: 35,
+	PassRewardPreviewID: 22444,
+	EntryPicPath: 'UI_DungeonPic_CycleDungeonChasm',
+	disorderoverride: 4145618250
+},
+{ // machine nest 3
+	Id: 99993,
+	Type: "DUNGEON_DAILY_FIGHT",
+	StateType: "DUNGEON_STATE_RELEASE",
+	NameTextMapHash: 2797186184,
+	DescTextMapHash: 1269716077,
+	CityID: 2,
+	ShowLevel: 59,
+	RecommendElementTypes: ['Fire', 'Electric', 'Rock', 'Wind'],
+	LimitLevel: 40,
+	PassRewardPreviewID: 22445,
+	EntryPicPath: 'UI_DungeonPic_CycleDungeonChasm',
+	disorderoverride: 4145618250
+},
+{ // machine nest 4
+	Id: 99994,
+	Type: "DUNGEON_DAILY_FIGHT",
+	StateType: "DUNGEON_STATE_RELEASE",
+	NameTextMapHash: 1531297112,
+	DescTextMapHash: 1269716077,
+	CityID: 2,
+	ShowLevel: 59,
+	RecommendElementTypes: ['Fire', 'Electric', 'Rock', 'Wind'],
+	LimitLevel: 45,
+	PassRewardPreviewID: 22446,
+	EntryPicPath: 'UI_DungeonPic_CycleDungeonChasm',
+	disorderoverride: 4145618250
+},
+];

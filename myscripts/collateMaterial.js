@@ -1,6 +1,26 @@
 /*
 MATERIAL_AVATAR_MATERIAL is talent level-up material, etc.
 
+check MaterialSourceDataExcelConfigData should have
+{
+	Id: 114007,
+	DungeonList: [
+		4320,
+		4321,
+		4322,
+		4323
+	],
+	TextList: [
+		4083257751,
+		4201531456,
+		3807357581,
+		2886122308,
+		3675025673,
+		2276455088
+	]
+}
+
+
 */
 
 const filter = ['MATERIAL_EXCHANGE', 'MATERIAL_WOOD', 'MATERIAL_AVATAR_MATERIAL', 'MATERIAL_EXP_FRUIT',
@@ -60,8 +80,10 @@ function collateMaterial(lang) {
 		let dungeonlist = tmp.DungeonList.filter(ele => ele !== 0);
 		if(dungeonlist > 0) {
 			if(dungeonlist.length > 1) console.log(`${data.name} drops from more than one dungeon!`);
-			data.dropdomain = language[xdungeon.find(ele => ele.Id === dungeonlist[0]).DisplayNameTextMapHash]; // artifact domains don't have DisplayNameTextMapHash
-			data.daysofweek = getDayWeekList(dungeonlist[0], language); 
+			if(xdungeon.find(ele => ele.Id === dungeonlist[0])) {
+				// data.dropdomain = language[xdungeon.find(ele => ele.Id === dungeonlist[0]).DisplayNameTextMapHash]; // artifact domains don't have DisplayNameTextMapHash
+				// data.daysofweek = getDayWeekList(dungeonlist[0], language); 
+			}
 		}
 		// get fishing locations
 		if(getLanguage('EN')[obj.TypeDescTextMapHash] === 'Fish') {
@@ -78,7 +100,8 @@ function collateMaterial(lang) {
 				return poolAccum;
 			}, []);
 		}
-		data.source = tmp.TextList.map(ele => language[ele]).filter(ele => ele !== '');
+		const sourcelist = tmp.TextList.concat(tmp.JumpList);
+		data.source = sourcelist.map(ele => language[ele]).filter(ele => ele !== ''); // TextList/JumpList
 
 		data.imagename = obj.Icon;
 		if(!data.imagename) console.log(data.name+' has no icon');
@@ -116,4 +139,4 @@ function cleanupMaterialSourceFile() {
 	fs.writeFileSync('../ExcelBinOutput/MaterialSourceDataExcelConfigData.json', data);
 }
 
-cleanupMaterialSourceFile();
+// cleanupMaterialSourceFile();

@@ -53,6 +53,11 @@ const monsterMap = {
 	"bless necropolis iii": ['thunder hound', 'thunder hound whelp', 'el hili shooter'],
 	"bless necropolis iv": ['thunder hound', 'thunder hound whelp', 'crack axe mita'],
 
+	"bless machine nest i": ['ru guard', 'ru destroy'],
+	"bless machine nest ii": ['ru guard', 'ru scout', 'ru cruiser', 'ru destroy'],
+	"bless machine nest iii": ['ru scout', 'ru cruiser', 'ru destroy'],
+	"bless machine nest iv": ['ru grader', 'ru cruiser', 'ru destroy'],
+
 	"forge alt sand i": ['hy slime', 'la hy slime', 'py slime', 'la py slime'],
 	"forge alt sand ii": ['la hy slime', 'la py slime'],
 	"forge alt sand iii": ['la hy slime', 'la py slime', 'hy ab mage', 'py ab mage'],

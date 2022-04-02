@@ -108,17 +108,18 @@ function exportData(folder, collateFunc, englishonly, skipwrite) {
 // exportCurve('weapons', 'WeaponCurveExcelConfigData')
 // exportData('artifacts', require('./collateArtifact.js'));
 // exportData('foods', require('./collateFood'));
-// exportData('materials', require('./collateMaterial')); // run twice
+// exportData('materials', require('./collateMaterial'), false); // change: used both TextList/JumpList. temp removed dropdomain/daysofweek
 exportData('domains', require('./collateDomain')); // run twice // remember to add back recommendedelements and disorder and entrypicpath
-// exportData('enemies', require('./collateEnemy'));
-// exportData('domains', require('./collateDomainMonsterList')); // run only after both domains and enemies have run. sync. must do after domain
+// exportData('enemies', require('./collateEnemy'), true);
 // exportCurve('enemies', 'MonsterCurveExcelConfigData');
 
-// exportData('outfits', require('./collateOutfit'));
+exportData('domains', require('./collateDomainMonsterList')); // MUST do run only after both domains and enemies have run. sync.
+
+// exportData('outfits', require('./collateOutfit')); // Fix obfuscated keys!
 // exportData('windgliders', require('./collateWindGlider'));
 // exportData('animals', require('./collateAnimal'));
-// exportData('namecards', require('./collateNamecard')); // not done
-// exportData('geographies', require('./collateGeography')); // not done
+// exportData('namecards', require('./collateNamecard'));
+// exportData('geographies', require('./collateGeography'));
 // exportData('achievements', require('./collateAchievement'));
 // exportData('achievementgroups', require('./collateAchievementGroup'));
 // exportData('commissions', require('./collateCommission'), true);

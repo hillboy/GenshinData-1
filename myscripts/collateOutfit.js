@@ -5,9 +5,9 @@ const xavatar = getExcel('AvatarExcelConfigData');
 
 // for AvatarCostumeExcelConfigData
 const propertyMap = {
-	Id: 'KBBEOGFDOOL',
-	AvatarId: 'LDPMEMMAELP', // 10000003
-	IconName: 'BBPJLOILMEA' // UI_AvatarIcon_QinCostumeSea
+	Id: 'OBACDKHOCAM', // 200301
+	AvatarId: 'BPAMNILGFPK', // 10000003
+	IconName: 'DANEMGDCNIM' // UI_AvatarIcon_QinCostumeSea
 }
 
 // taken from collateCharacter.js

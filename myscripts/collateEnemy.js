@@ -31,6 +31,7 @@ function collateEnemy(lang) {
 	let mymonster = xcodex.reduce((accum, obj) => {
 		if(obj.Type !== 'CODEX_MONSTER') return accum;
 		if(obj.IsDeleteWatcherAfterFinish) return accum;
+		if(obj.Id === 29010101) obj.Id = 29010104; // use correct stormterror
 		let mon = xmonster.find(m => m.Id === obj.Id);
 		let des = xdescribe.find(d => d.Id === obj.DescribeId);
 		let spe = xspecial.find(s => s.SpecialNameLabID === des.SpecialNameLabID);
@@ -63,7 +64,7 @@ function collateEnemy(lang) {
 				// Abyss Lector: Violet Lightning, Abyss Herald: Wicked Torrents, Abyss Lector: Fathomless Flames
 				// Hydro Cicin, Electro Cicin, Cryo Cicin
 				data.rewardpreview = [];
-			} else if(obj.Id === 29010101) { // dvalin lvl90
+			} else if(obj.Id === 29010104) { // dvalin lvl90
 				let rewardpreview = xpreview.find(pre => pre.Id === 15005).PreviewItems.filter(pre => pre.Id);
 				data.rewardpreview = mapRewardList(rewardpreview, language);
 			} else if(obj.Id === 29020101) { // wolfboss lvl90
@@ -93,6 +94,7 @@ function collateEnemy(lang) {
 
 		let sub = obj.SubType || 'CODEX_SUBTYPE_ELEMENTAL';
 		sub = sub.slice(sub.lastIndexOf('_')+1);
+		// console.log(obj.Id);
 		// console.log(sub);
 		sub = xmanualtext.find(m => m.TextMapId === `UI_CODEX_ANIMAL_CATEGORY_${sub}`).TextMapContentTextMapHash;
 		data.enemytype = mon.SecurityLevel || 'COMMON';
@@ -128,6 +130,7 @@ function collateEnemy(lang) {
 		stats.base.defense = mon.DefenseBase;
 		stats.curve = {};
 		try {
+			// if(obj.Id === 29010101) console.log(mon.PropGrowCurves);
 			stats.curve.hp = mon.PropGrowCurves.find(ele => ele.Type === 'FIGHT_PROP_BASE_HP').GrowCurve;
 			stats.curve.attack = mon.PropGrowCurves.find(ele => ele.Type === 'FIGHT_PROP_BASE_ATTACK').GrowCurve;
 			stats.curve.defense = mon.PropGrowCurves.find(ele => ele.Type === 'FIGHT_PROP_BASE_DEFENSE').GrowCurve;
@@ -236,6 +239,11 @@ function fixAnimalCodexSubType() {
 		let match = out.find(ele => ele.Id === ob.KABAHENDGOO); // replace with ID
 		match.SubType = ob.JKOLEMPKHMI; // replace with CODEX_SUBTYPE_HILICHURL
 	}
+	// manual fixes for 2.6 update
+	out.find(ele => ele.Id === 22080101).SubType = "CODEX_SUBTYPE_ABYSS";
+	out.find(ele => ele.Id === 24010401).SubType = "CODEX_SUBTYPE_AUTOMATRON";
+	out.find(ele => ele.Id === 26090101).SubType = "CODEX_SUBTYPE_BEAST";
+
 	out = JSON.stringify(out, null, '\t');
 	fs.writeFileSync('../ExcelBinOutput/AnimalCodexExcelConfigData.json', out);
 }

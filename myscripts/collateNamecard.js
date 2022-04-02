@@ -12,6 +12,7 @@ function collateNamecard(lang) {
 
 		data.name = language[obj.NameTextMapHash];
 		data.description = sanitizeDescription(language[obj.DescTextMapHash]);
+		data.sortorder = obj.Id;
 
 		let sauce = xsource.find(ele => ele.Id === obj.Id);
 		data.source = sauce.TextList.map(ele => language[ele]).filter(ele => ele !== '');
