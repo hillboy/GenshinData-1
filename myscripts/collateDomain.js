@@ -127,7 +127,7 @@ function collateDomain(lang) {
 				return { name: language[disp.NameTextMapHash], rarity: disp.RankLevel+'' };
 			}
 		});
-		if(obj.disorderoverride) data.disorder = language[obj.disorderoverride];
+		if(obj.disorderoverride) data.disorder = obj.disorderoverride.map(d => language[d]);
 		//data.disorder = xdisorder.filter(d => d.Id+'' === Object.keys(obj.LevelConfigMap)[0]).map(d => language[d.DescTextMapHash]);
 		data.imagename = obj.EntryPicPath;
 
@@ -180,7 +180,7 @@ let moredungeons = [
 	LimitLevel: 30,
 	PassRewardPreviewID: 22443,
 	EntryPicPath: 'UI_DungeonPic_CycleDungeonChasm',
-	disorderoverride: 4145618250
+	disorderoverride: [4145618250]
 },
 { // machine nest 2
 	Id: 99992,
@@ -194,7 +194,7 @@ let moredungeons = [
 	LimitLevel: 35,
 	PassRewardPreviewID: 22444,
 	EntryPicPath: 'UI_DungeonPic_CycleDungeonChasm',
-	disorderoverride: 4145618250
+	disorderoverride: [4145618250]
 },
 { // machine nest 3
 	Id: 99993,
@@ -208,7 +208,7 @@ let moredungeons = [
 	LimitLevel: 40,
 	PassRewardPreviewID: 22445,
 	EntryPicPath: 'UI_DungeonPic_CycleDungeonChasm',
-	disorderoverride: 4145618250
+	disorderoverride: [4145618250]
 },
 { // machine nest 4
 	Id: 99994,
@@ -222,6 +222,6 @@ let moredungeons = [
 	LimitLevel: 45,
 	PassRewardPreviewID: 22446,
 	EntryPicPath: 'UI_DungeonPic_CycleDungeonChasm',
-	disorderoverride: 4145618250
+	disorderoverride: [4145618250]
 },
 ];

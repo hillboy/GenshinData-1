@@ -70,6 +70,26 @@ global.dayOfWeek = function(num) {
 	return xmanualtext.find(ele => ele.TextMapId === 'UI_ABYSSUS_DATE'+num).TextMapContentTextMapHash;
 }
 
+const xcity = getExcel('CityConfigData');
+// adds Snezhnaya manually
+if(!xcity.find(ele => getLanguage('EN')[ele.CityNameTextMapHash] === 'Snezhnaya')) {
+	getLanguage('CHS')['Snezhnaya'] = '至冬国';
+	getLanguage('CHT')['Snezhnaya'] = '至冬國';
+	getLanguage('DE')['Snezhnaya'] = 'Snezhnaya';
+	getLanguage('EN')['Snezhnaya'] = 'Snezhnaya';
+	getLanguage('ES')['Snezhnaya'] = 'Snezhnaya';
+	getLanguage('FR')['Snezhnaya'] = 'Snezhnaya';
+	getLanguage('ID')['Snezhnaya'] = 'Snezhnaya';
+	getLanguage('JP')['Snezhnaya'] = 'スネージナヤ';
+	getLanguage('KR')['Snezhnaya'] = '스네즈나야';
+	getLanguage('PT')['Snezhnaya'] = 'Snezhnaya';
+	getLanguage('RU')['Snezhnaya'] = 'Снежной';
+	getLanguage('TH')['Snezhnaya'] = 'Snezhnaya';
+	getLanguage('VI')['Snezhnaya'] = 'Snezhnaya';
+
+	xcity.push({ CityId: 8758412, CityNameTextMapHash: 'Snezhnaya'})
+}
+
 /* =========================================================================================== */
 
 function exportCurve(folder, file) {
@@ -100,7 +120,7 @@ function exportData(folder, collateFunc, englishonly, skipwrite) {
 	console.log("done "+folder);
 }
 
-// exportData('characters', require('./collateCharacter.js'));
+exportData('characters', require('./collateCharacter.js'));
 // exportCurve('characters', 'AvatarCurveExcelConfigData');
 // exportData('constellations', require('./collateConstellation'));
 // exportData('talents', require('./collateTalent.js'));
@@ -109,11 +129,11 @@ function exportData(folder, collateFunc, englishonly, skipwrite) {
 // exportData('artifacts', require('./collateArtifact.js'));
 // exportData('foods', require('./collateFood'));
 // exportData('materials', require('./collateMaterial'), false); // change: used both TextList/JumpList. temp removed dropdomain/daysofweek
-exportData('domains', require('./collateDomain')); // run twice // remember to add back recommendedelements and disorder and entrypicpath
+// exportData('domains', require('./collateDomain')); // run twice // remember to add back recommendedelements and disorder and entrypicpath
 // exportData('enemies', require('./collateEnemy'), true);
 // exportCurve('enemies', 'MonsterCurveExcelConfigData');
 
-exportData('domains', require('./collateDomainMonsterList')); // MUST do run only after both domains and enemies have run. sync.
+// exportData('domains', require('./collateDomainMonsterList')); // MUST do run only after both domains and enemies have run. sync.
 
 // exportData('outfits', require('./collateOutfit')); // Fix obfuscated keys!
 // exportData('windgliders', require('./collateWindGlider'));

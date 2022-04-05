@@ -5,7 +5,16 @@ const xextrainfo = getExcel('FetterInfoExcelConfigData');
 const playerIdToTextMapHash = { 10000005: 2329553598, 10000007: 3241049361 };
 const moraNameTextMapHash = getExcel('MaterialExcelConfigData').find(ele => ele.Id === 202).NameTextMapHash;
 const xmat = getExcel('MaterialExcelConfigData');
+const xcity = getExcel('CityConfigData');
 
+const associationToCityId = {
+	'LIYUE': 2,
+	'MONDSTADT': 1,
+	'FATUI': 8758412,
+	'INAZUMA': 3,
+	'MAINACTOR': '',
+	'RANGER': '',
+}
 
 function collateCharacter(lang) {
 	const language = getLanguage(lang);
@@ -46,6 +55,13 @@ function collateCharacter(lang) {
 		if(obj.Id === 10000030) data.constellation = language[extra.AvatarConstellationAfterTextMapHash]; // Zhongli exception
 		data.title = language[extra.AvatarTitleTextMapHash];
 		data.association = extra.AvatarAssocType.slice(extra.AvatarAssocType.indexOf('TYPE_')+5);
+		if(associationToCityId[data.association] === undefined)
+			console.log(`character missing cityId for association ${data.association}`);
+		else if(associationToCityId[data.association] === '')
+			data.region = '';
+		else {
+			data.region = language[xcity.find(ele => ele.CityId === associationToCityId[data.association]).CityNameTextMapHash];
+		}
 		data.cv = {
 			english: language[extra.CvEnglishTextMapHash],
 			chinese: language[extra.CvChineseTextMapHash],
