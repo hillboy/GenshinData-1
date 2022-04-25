@@ -47,6 +47,7 @@ function collateArtifact(lang) {
 			relicdata.relictype = language[relicdata.relictype];
 			relicdata.description = language[relic.DescTextMapHash];
 			data[relicTypeToPropertyName[relic.EquipType]] = relicdata;
+			data.images['name'+relicTypeToPropertyName[relic.EquipType]] = relic.Icon;
 			data.images[relicTypeToPropertyName[relic.EquipType]] = `https://upload-os-bbs.mihoyo.com/game_record/genshin/equip/${relic.Icon}.png`;
 		});
 

@@ -120,13 +120,13 @@ function exportData(folder, collateFunc, englishonly, skipwrite) {
 	console.log("done "+folder);
 }
 
-exportData('characters', require('./collateCharacter.js'));
+// exportData('characters', require('./collateCharacter.js'));
 // exportCurve('characters', 'AvatarCurveExcelConfigData');
 // exportData('constellations', require('./collateConstellation'));
 // exportData('talents', require('./collateTalent.js'));
 // exportData('weapons', require('./collateWeapon.js'));
 // exportCurve('weapons', 'WeaponCurveExcelConfigData')
-// exportData('artifacts', require('./collateArtifact.js'));
+exportData('artifacts', require('./collateArtifact.js'));
 // exportData('foods', require('./collateFood'));
 // exportData('materials', require('./collateMaterial'), false); // change: used both TextList/JumpList. temp removed dropdomain/daysofweek
 // exportData('domains', require('./collateDomain')); // run twice // remember to add back recommendedelements and disorder and entrypicpath
