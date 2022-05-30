@@ -4,7 +4,7 @@ const xpassive = getExcel('ProudSkillExcelConfigData'); // passive talents. also
 // object map that converts index to the talent type
 const talentCombatTypeMap = { '0': 'combat1', '1': 'combat2', '2': 'combatsp', '4': 'combat3' };
 
-const moraNameTextMapHash = getExcel('MaterialExcelConfigData').find(ele => ele.Id === 202).NameTextMapHash;
+const moraNameTextMapHash = getExcel('MaterialExcelConfigData').find(ele => ele.id === 202).nameTextMapHash;
 
 function collateTalent(lang) {
 	const language = getLanguage(lang);
@@ -13,42 +13,42 @@ function collateTalent(lang) {
 		// bad practice to declare functions inside loop but i need to be able to call it multiple times for players
 		function dowork() {
 			let data = {};
-			let depot = xskilldepot.find(ele => ele.Id === obj.SkillDepotId);
-			if(depot === undefined || depot.EnergySkill === undefined) return; // not a finished (traveler) character
-			if(depot.TalentStarName === '') return; // unfinished
+			let depot = xskilldepot.find(ele => ele.id === obj.skillDepotId);
+			if(depot === undefined || depot.energySkill === undefined) return; // not a finished (traveler) character
+			if(depot.talentStarName === '') return; // unfinished
 
-			let filename = avatarIdToFileName[isPlayer(obj) ? obj.SkillDepotId : obj.Id];
+			let filename = avatarIdToFileName[isPlayer(obj) ? obj.skillDepotId : obj.id];
 
-			data.name = language[obj.NameTextMapHash]; // client-facing name
-			if(isPlayer(obj)) data.name += ` (${language[elementTextMapHash[getPlayerElement(obj.SkillDepotId)]]})`
+			data.name = language[obj.nameTextMapHash]; // client-facing name
+			if(isPlayer(obj)) data.name += ` (${language[elementTextMapHash[getPlayerElement(obj.skillDepotId)]]})`
 
-			let combat = depot.Skills.concat([depot.EnergySkill]) // get array of combat skills IDs
-			// console.log(depot.InherentProudSkillOpens)
-			let passive = depot.InherentProudSkillOpens.reduce((accum2, proud, index) => { // get array of passive skill IDs
+			let combat = depot.skills.concat([depot.energySkill]) // get array of combat skills IDs
+			// console.log(depot.inherentProudSkillOpens)
+			let passive = depot.inherentProudSkillOpens.reduce((accum2, proud, index) => { // get array of passive skill IDs
 				if(filename === 'raidenshogun' && index === 2) return accum2; // skip hidden cannot cook passive
-				if(proud.ProudSkillGroupId) accum2.push(proud.ProudSkillGroupId);
+				if(proud.proudSkillGroupId) accum2.push(proud.proudSkillGroupId);
 				return accum2;
 			}, []);
 			let parameters = {};
 			let costs = {};
 			combat.forEach((skId, index) => {
 				if(skId === 0) return;
-				let talent = xtalent.find(tal => tal.Id === skId);
+				let talent = xtalent.find(tal => tal.id === skId);
 				let combatTypeProp = talentCombatTypeMap[index];
 				let ref = data[combatTypeProp] = {};
-				ref.Id = talent.Id;
-				ref.name = language[talent.NameTextMapHash];
-				let desc = language[talent.DescTextMapHash].split('\\n\\n<i>'); // extract out the italicized part
+				ref.id = talent.id;
+				ref.name = language[talent.nameTextMapHash];
+				let desc = language[talent.descTextMapHash].split('\\n\\n<i>'); // extract out the italicized part
 				ref.info = sanitizeDescription(desc[0]);
 				if(desc[1]) ref.description = sanitizeDescription(desc[1]);
-				ref.icon = talent.SkillIcon;
+				ref.icon = talent.skillIcon;
 				if(combatTypeProp === 'combat3')
 					ref.icon = ref.icon + '_HD';
 
 				ref.labels = [];
 				// build the labels
-				let attTalent = xpassive.find(tal => (tal.ProudSkillGroupId === talent.ProudSkillGroupId && tal.Level === 1));
-				for(let labelTextMap of attTalent.ParamDescList) {
+				let attTalent = xpassive.find(tal => (tal.proudSkillGroupId === talent.proudSkillGroupId && tal.level === 1));
+				for(let labelTextMap of attTalent.paramDescList) {
 					if(language[labelTextMap] === "") continue;
 					ref.labels.push(replaceLayout(language[labelTextMap]));
 				}
@@ -56,8 +56,8 @@ function collateTalent(lang) {
 				parameters[combatTypeProp] = {};
 				for(let lvl = 1; lvl <= 15; lvl++) {
 					if(lvl !== 1 && index === 2) continue; // sprint skills don't have level-up
-					let attTalent = xpassive.find(tal => (tal.ProudSkillGroupId === talent.ProudSkillGroupId && tal.Level === lvl));
-					attTalent.ParamList.forEach((value, paramIndex) => {
+					let attTalent = xpassive.find(tal => (tal.proudSkillGroupId === talent.proudSkillGroupId && tal.level === lvl));
+					attTalent.paramList.forEach((value, paramIndex) => {
 						const name = `param${paramIndex+1}`;
 						if(value === 0) { // exclude those with values of 0
 							if(lvl !== 1 && parameters[combatTypeProp][name] !== undefined) console.log(`talent ${ref.name} value 0`);
@@ -69,13 +69,13 @@ function collateTalent(lang) {
 					if(lvl >= 2 && lvl <= 10) { // get upgrade costs
 						costs['lvl'+lvl] = [{
 							name: language[moraNameTextMapHash],
-							count: attTalent.CoinCost
+							count: attTalent.coinCost
 						}];
-						for(let items of attTalent.CostItems) {
-							if(items.Id === undefined) continue;
+						for(let items of attTalent.costItems) {
+							if(items.id === undefined) continue;
 							costs['lvl'+lvl].push({
-								name: language[xmat.find(ele => ele.Id === items.Id).NameTextMapHash],
-								count: items.Count
+								name: language[xmat.find(ele => ele.id === items.id).nameTextMapHash],
+								count: items.count
 							})
 						}
 					}
@@ -83,12 +83,12 @@ function collateTalent(lang) {
 			});
 
 			passive.forEach((skId, index) => {
-				let talent = xpassive.find(pas => pas.ProudSkillGroupId === skId);
+				let talent = xpassive.find(pas => pas.proudSkillGroupId === skId);
 				let ref = data['passive'+(index+1)] = {}; // store reference in variable to make it easier to access
-				ref.Id = skId;
-				ref.name = language[talent.NameTextMapHash];
-				ref.info = sanitizeDescription(language[talent.DescTextMapHash]);
-				ref.icon = talent.Icon;
+				ref.id = skId;
+				ref.name = language[talent.nameTextMapHash];
+				ref.info = sanitizeDescription(language[talent.descTextMapHash]);
+				ref.icon = talent.icon;
 			});
 			data.costs = costs;
 			data.parameters = parameters;
@@ -97,8 +97,8 @@ function collateTalent(lang) {
 		}
 
 		if(isPlayer(obj)) {
-			obj.CandSkillDepotIds.forEach(ele => {
-				obj.SkillDepotId = ele;
+			obj.candSkillDepotIds.forEach(ele => {
+				obj.skillDepotId = ele;
 				dowork();
 			});
 		} else {

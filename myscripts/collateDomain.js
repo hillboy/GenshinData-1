@@ -12,7 +12,7 @@ const domainType = {
 	UI_ABYSSUS_AVATAR_PROUD: "UI_ABYSSUS_AVATAR_PROUD"
 }
 function getDomainTypeTextMapHash(domaintype) {
-	return xmanualtext.find(ele => ele.TextMapId === domaintype).TextMapContentTextMapHash;
+	return xmanualtext.find(ele => ele.textMapId === domaintype).textMapContentTextMapHash;
 }
 
 /*
@@ -35,7 +35,7 @@ function getDomainTypeTextMapHash(domaintype) {
 */
 function getDomainEntranceTextMapHash(englishname) {
 	englishname = englishname.toLowerCase();
-	function mapping(textmapid) { return xmanualtext.find(ele => ele.TextMapId === textmapid).TextMapContentTextMapHash; }
+	function mapping(textmapid) { return xmanualtext.find(ele => ele.textMapId === textmapid).textMapContentTextMapHash; }
 
 	if(englishname.includes('dance of steel'))
 		return mapping("UI_DUNGEON_ENTRY_27");
@@ -57,7 +57,7 @@ function getDomainEntranceTextMapHash(englishname) {
 		return mapping("UI_DUNGEON_ENTRY_54");
 	else if(englishname.includes('unyielding'))
 		return mapping("UI_DUNGEON_ENTRY_282");
-	else if(englishname.includes('elegaic rime'))
+	else if(englishname.includes('elegiac rime'))
 		return mapping("UI_DUNGEON_ENTRY_221");
 	else if(englishname.includes('autumn hunt'))
 		return mapping("UI_DUNGEON_ENTRY_361");
@@ -83,55 +83,56 @@ function isSundaySpecial(englishname) {
 function collateDomain(lang) {
 	const language = getLanguage(lang);
 	const xmat = getExcel('MaterialExcelConfigData');
-	xdungeon = moredungeons.concat(xdungeon);
+	// xdungeon = moredungeons.concat(xdungeon);
 	let mydomain = xdungeon.reduce((accum, obj) => {
-		if(obj.Type !== "DUNGEON_DAILY_FIGHT" || obj.StateType !== "DUNGEON_STATE_RELEASE") return accum;
-		if(isSundaySpecial(getLanguage('EN')[obj.NameTextMapHash])) return accum;
-		// console.log(obj.Id);
+		if(obj.type !== "DUNGEON_DAILY_FIGHT" || obj.stateType !== "DUNGEON_STATE_RELEASE") return accum;
+		if(isSundaySpecial(getLanguage('EN')[obj.nameTextMapHash])) return accum;
+		// console.log(obj.id);
 		let data = {};
-		data.Id = obj.Id;
-		data.name = language[obj.NameTextMapHash];
-		// data.displayname = language[obj.DisplayNameTextMapHash]; // doesn't exist for artifact domains
-		data.domainentrance = language[getDomainEntranceTextMapHash(getLanguage('EN')[obj.NameTextMapHash])];// obj.EntryPicPath;
-		data.description = sanitizeDescription(language[obj.DescTextMapHash]);
+		data.id = obj.id;
+		data.name = language[obj.nameTextMapHash];
+		// data.displayname = language[obj.displayNameTextMapHash]; // doesn't exist for artifact domains
+		data.domainentrance = language[getDomainEntranceTextMapHash(getLanguage('EN')[obj.nameTextMapHash])];// obj.entryPicPath;
+		data.description = sanitizeDescription(language[obj.descTextMapHash]);
 
-		if(obj.Id === 5120 || obj.Id === 5121 || obj.Id === 5122 || obj.Id === 5123) obj.CityID = 1; // Peak of Vindagnyr region fix from Liyue to Mondstadt
-		if(obj.Id >= 5258 && obj.Id <= 5265) obj.CityID = 2; // Taishan Mansion in Liyue
-		if(obj.Id >= 5214 && obj.Id <= 5225) obj.CityID = 2; // Hidden Palace of Lianshan Formula in Liyue
-		if(obj.Id >= 5200 && obj.Id <= 5207) obj.CityID = 3; // Slumbering Court in Inazuma, and Momiji-Dyed Court
+		// CITY FIX // fix no longer needed 2.7
+		// if(obj.id === 5120 || obj.id === 5121 || obj.id === 5122 || obj.id === 5123) obj.cityID = 1; // Peak of Vindagnyr region fix from Liyue to Mondstadt
+		// if(obj.id >= 5258 && obj.id <= 5265) obj.cityID = 2; // Taishan Mansion in Liyue
+		// if(obj.id >= 5214 && obj.id <= 5225) obj.cityID = 2; // Hidden Palace of Lianshan Formula in Liyue
+		// if(obj.id >= 5200 && obj.id <= 5207) obj.cityID = 3; // Slumbering Court in Inazuma, and Momiji-Dyed Court
 
-		data.region = language[xcity.find(city => city.CityId === obj.CityID).CityNameTextMapHash];
+		data.region = language[xcity.find(city => city.cityId === obj.cityID).cityNameTextMapHash];
 
-		data.recommendedlevel = obj.ShowLevel;
-		if(typeof obj.RecommendElementTypes[0] === 'string')
-			data.recommendedelements = obj.RecommendElementTypes.filter(ele => ele !== 'None').map(ele => language[xmanualtext.find(man => man.TextMapId === ele).TextMapContentTextMapHash]);
-		data.daysofweek = getDayWeekList(obj.Id, language);
+		data.recommendedlevel = obj.showLevel;
+		if(typeof obj.recommendElementTypes[0] === 'string')
+			data.recommendedelements = obj.recommendElementTypes.filter(ele => ele !== 'None').map(ele => language[xmanualtext.find(man => man.textMapId === ele).textMapContentTextMapHash]);
+		data.daysofweek = getDayWeekList(obj.id, language);
 		if(data.daysofweek.length === 0) delete data.daysofweek;
 
-		data.unlockrank = obj.LimitLevel;
-		let rewardpreview = xpreview.find(pre => pre.Id === obj.PassRewardPreviewID).PreviewItems.filter(pre => pre.Id);
+		data.unlockrank = obj.limitLevel;
+		let rewardpreview = xpreview.find(pre => pre.id === obj.passRewardPreviewID).previewItems.filter(pre => pre.id);
 		data.rewardpreview = rewardpreview.map(repre => {
-			let mat = xmat.find(m => m.Id === repre.Id);
+			let mat = xmat.find(m => m.id === repre.id);
 			if(mat) { // is material
-				let reward = { name: language[mat.NameTextMapHash] };
-				if(mat.MaterialType !== 'MATERIAL_AVATAR_MATERIAL') reward.count = parseInt(repre.Count);
-				if((getLanguage('EN')[mat.TypeDescTextMapHash]).includes('Weapon')) {
+				let reward = { name: language[mat.nameTextMapHash] };
+				if(mat.materialType !== 'MATERIAL_AVATAR_MATERIAL') reward.count = parseInt(repre.count);
+				if((getLanguage('EN')[mat.typeDescTextMapHash]).includes('Weapon')) {
 					data.domaintype = language[getDomainTypeTextMapHash(domainType.UI_ABYSSUS_WEAPON_PROMOTE)];
 				} else {
 					data.domaintype = language[getDomainTypeTextMapHash(domainType.UI_ABYSSUS_AVATAR_PROUD)];
 				}
 				return reward;
 			} else { // is artifact
-				let disp = xdisplay.find(d => d.Id === repre.Id);
+				let disp = xdisplay.find(d => d.id === repre.id);
 				data.domaintype = language[getDomainTypeTextMapHash(domainType.UI_ABYSSUS_RELIC)];
-				return { name: language[disp.NameTextMapHash], rarity: disp.RankLevel+'' };
+				return { name: language[disp.nameTextMapHash], rarity: disp.rankLevel+'' };
 			}
 		});
-		if(obj.disorderoverride) data.disorder = obj.disorderoverride.map(d => language[d]);
-		//data.disorder = xdisorder.filter(d => d.Id+'' === Object.keys(obj.LevelConfigMap)[0]).map(d => language[d.DescTextMapHash]);
-		data.imagename = obj.EntryPicPath;
+		// if(obj.disorderoverride) data.disorder = obj.disorderoverride.map(d => language[d]); // fix not needed anymore
+		data.disorder = xdisorder.filter(d => d.id+'' === Object.keys(obj.levelConfigMap)[0]).map(d => language[d.descTextMapHash]);
+		data.imagename = obj.entryPicPath;
 
-		let filename = makeFileName(getLanguage('EN')[obj.NameTextMapHash]);
+		let filename = makeFileName(getLanguage('EN')[obj.nameTextMapHash]);
 		if(filename === '') return accum;
 		accum[filename] = data;
 		return accum;
@@ -142,7 +143,7 @@ function collateDomain(lang) {
 // format returned is translated and sorted array ["Monday", "Thursday", "Sunday"]
 function getDayWeekList(dungeonId, langmap) {
 	const xdailyd = getExcel('DailyDungeonConfigData');
-	const mapENtoNum = { 'Monday': 1, 'Tuesday': 2, 'Wednesday': 3, 'Thursday': 4, 'Friday': 5, 'Saturday': 6, 'Sunday': 7 };
+	const mapENtoNum = { 'monday': 1, 'tuesday': 2, 'wednesday': 3, 'thursday': 4, 'friday': 5, 'saturday': 6, 'sunday': 7 };
 	let mylist = [];
 	for(const ele of xdailyd)
 		for(const [key, value] of Object.entries(mapENtoNum))
@@ -163,65 +164,66 @@ function cleanupDungeonFile() {
 	fs.writeFileSync('../ExcelBinOutput/DungeonExcelConfigData.json', data);
 }
 
-cleanupDungeonFile();
+// cleanupDungeonFile();
 
 // Fire, Water, Ice, Rock, Electric, Wind, Grass
 
-let moredungeons = [
-{ // machine nest 1
-	Id: 99991,
-	Type: "DUNGEON_DAILY_FIGHT",
-	StateType: "DUNGEON_STATE_RELEASE",
-	NameTextMapHash: 4233644080,
-	DescTextMapHash: 1269716077,
-	CityID: 2,
-	ShowLevel: 59,
-	RecommendElementTypes: ['Fire', 'Electric', 'Rock', 'Wind'],
-	LimitLevel: 30,
-	PassRewardPreviewID: 22443,
-	EntryPicPath: 'UI_DungeonPic_CycleDungeonChasm',
-	disorderoverride: [4145618250]
-},
-{ // machine nest 2
-	Id: 99992,
-	Type: "DUNGEON_DAILY_FIGHT",
-	StateType: "DUNGEON_STATE_RELEASE",
-	NameTextMapHash: 1948966872,
-	DescTextMapHash: 1269716077,
-	CityID: 2,
-	ShowLevel: 59,
-	RecommendElementTypes: ['Fire', 'Electric', 'Rock', 'Wind'],
-	LimitLevel: 35,
-	PassRewardPreviewID: 22444,
-	EntryPicPath: 'UI_DungeonPic_CycleDungeonChasm',
-	disorderoverride: [4145618250]
-},
-{ // machine nest 3
-	Id: 99993,
-	Type: "DUNGEON_DAILY_FIGHT",
-	StateType: "DUNGEON_STATE_RELEASE",
-	NameTextMapHash: 2797186184,
-	DescTextMapHash: 1269716077,
-	CityID: 2,
-	ShowLevel: 59,
-	RecommendElementTypes: ['Fire', 'Electric', 'Rock', 'Wind'],
-	LimitLevel: 40,
-	PassRewardPreviewID: 22445,
-	EntryPicPath: 'UI_DungeonPic_CycleDungeonChasm',
-	disorderoverride: [4145618250]
-},
-{ // machine nest 4
-	Id: 99994,
-	Type: "DUNGEON_DAILY_FIGHT",
-	StateType: "DUNGEON_STATE_RELEASE",
-	NameTextMapHash: 1531297112,
-	DescTextMapHash: 1269716077,
-	CityID: 2,
-	ShowLevel: 59,
-	RecommendElementTypes: ['Fire', 'Electric', 'Rock', 'Wind'],
-	LimitLevel: 45,
-	PassRewardPreviewID: 22446,
-	EntryPicPath: 'UI_DungeonPic_CycleDungeonChasm',
-	disorderoverride: [4145618250]
-},
-];
+// not used anymore since it was fixed 2.7
+// let moredungeons = [
+// { // machine nest 1
+// 	Id: 99991,
+// 	Type: "DUNGEON_DAILY_FIGHT",
+// 	StateType: "DUNGEON_STATE_RELEASE",
+// 	NameTextMapHash: 4233644080,
+// 	DescTextMapHash: 1269716077,
+// 	CityID: 2,
+// 	ShowLevel: 59,
+// 	RecommendElementTypes: ['Fire', 'Electric', 'Rock', 'Wind'],
+// 	LimitLevel: 30,
+// 	PassRewardPreviewID: 22443,
+// 	EntryPicPath: 'UI_DungeonPic_CycleDungeonChasm',
+// 	disorderoverride: [4145618250]
+// },
+// { // machine nest 2
+// 	Id: 99992,
+// 	Type: "DUNGEON_DAILY_FIGHT",
+// 	StateType: "DUNGEON_STATE_RELEASE",
+// 	NameTextMapHash: 1948966872,
+// 	DescTextMapHash: 1269716077,
+// 	CityID: 2,
+// 	ShowLevel: 59,
+// 	RecommendElementTypes: ['Fire', 'Electric', 'Rock', 'Wind'],
+// 	LimitLevel: 35,
+// 	PassRewardPreviewID: 22444,
+// 	EntryPicPath: 'UI_DungeonPic_CycleDungeonChasm',
+// 	disorderoverride: [4145618250]
+// },
+// { // machine nest 3
+// 	Id: 99993,
+// 	Type: "DUNGEON_DAILY_FIGHT",
+// 	StateType: "DUNGEON_STATE_RELEASE",
+// 	NameTextMapHash: 2797186184,
+// 	DescTextMapHash: 1269716077,
+// 	CityID: 2,
+// 	ShowLevel: 59,
+// 	RecommendElementTypes: ['Fire', 'Electric', 'Rock', 'Wind'],
+// 	LimitLevel: 40,
+// 	PassRewardPreviewID: 22445,
+// 	EntryPicPath: 'UI_DungeonPic_CycleDungeonChasm',
+// 	disorderoverride: [4145618250]
+// },
+// { // machine nest 4
+// 	Id: 99994,
+// 	Type: "DUNGEON_DAILY_FIGHT",
+// 	StateType: "DUNGEON_STATE_RELEASE",
+// 	NameTextMapHash: 1531297112,
+// 	DescTextMapHash: 1269716077,
+// 	CityID: 2,
+// 	ShowLevel: 59,
+// 	RecommendElementTypes: ['Fire', 'Electric', 'Rock', 'Wind'],
+// 	LimitLevel: 45,
+// 	PassRewardPreviewID: 22446,
+// 	EntryPicPath: 'UI_DungeonPic_CycleDungeonChasm',
+// 	disorderoverride: [4145618250]
+// },
+// ];

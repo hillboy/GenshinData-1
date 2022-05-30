@@ -34,10 +34,14 @@ const excludeMatId = [110000, 112001, 100086, 100087, 210, 211,
 					  101005, 101007, 106000, 106001];
 
 function sortMaterials(mata, matb) {
-	if(mata.Rank < matb.Rank) return -1;
-	if(mata.Rank > matb.Rank) return 1;
-	if(mata.Id < matb.Id) return -1;
-	if(mata.Id > matb.Id) return 1;
+	if(mata.rank === undefined) mata.rank = 99999999;
+	if(matb.rank === undefined) matb.rank = 99999999;
+	if(mata.rank < matb.rank) return -1;
+	if(mata.rank > matb.rank) return 1;
+	if((mata.rankLevel || 0) > (matb.rankLevel || 0)) return -1;
+	if((mata.rankLevel || 0) < (matb.rankLevel || 0)) return 1;
+	if(mata.id < matb.id) return -1;
+	if(mata.id > matb.id) return 1;
 	return 0;
 }
 
@@ -56,40 +60,41 @@ function collateMaterial(lang) {
 
 	let mymaterial = xmat.reduce((accum, obj) => {
 		sortOrder++;
-		if(!includeMatId.includes(obj.Id)) {
-			if(!obj.MaterialType) return accum;
-			if(excludeMatId.includes(obj.Id)) return accum;
-			if(!filter.includes(obj.MaterialType)) return accum;
+		if(!includeMatId.includes(obj.id)) {
+			if(!obj.materialType) return accum;
+			if(excludeMatId.includes(obj.id)) return accum;
+			if(!filter.includes(obj.materialType)) return accum;
 		}
-		if(obj.Icon === "UI_ItemIcon_109000") return accum; // skip recipes
-		else if(obj.Icon === "UI_ItemIcon_221003") return accum; // skip diagrams
-		else if(obj.Icon === "UI_ItemIcon_221035") return accum; // skip bait blueprint
-		else if(obj.Icon === "UI_ItemIcon_221001") return accum; // skip instruction blueprints
+		if(obj.icon === "UI_ItemIcon_109000") return accum; // skip recipes
+		else if(obj.icon === "UI_ItemIcon_221003") return accum; // skip diagrams
+		else if(obj.icon === "UI_ItemIcon_221035") return accum; // skip bait blueprint
+		else if(obj.icon === "UI_ItemIcon_221001") return accum; // skip instruction blueprints
 
 		let data = {};
-		data.Id = obj.Id;
-		data.name = language[obj.NameTextMapHash];
+		data.id = obj.id;
+		data.name = language[obj.nameTextMapHash];
 		if(data.name === '') return accum;
 		data.sortorder = sortOrder;
-		data.description = sanitizeDescription(language[obj.DescTextMapHash]);
-		data.category = obj.MaterialType ? obj.MaterialType.slice(9) : obj.ItemType;
-		data.materialtype = language[obj.TypeDescTextMapHash];
-		if(obj.RankLevel) data.rarity = ''+obj.RankLevel;
+		data.description = sanitizeDescription(language[obj.descTextMapHash]);
+		data.category = obj.materialType ? obj.materialType.slice(9) : obj.itemType;
+		data.materialtype = language[obj.typeDescTextMapHash];
+		// data.bagtab = 
+		if(obj.rankLevel) data.rarity = ''+obj.rankLevel;
 
-		let tmp = xsource.find(ele => ele.Id === obj.Id);
-		let dungeonlist = tmp.DungeonList.filter(ele => ele !== 0);
+		let tmp = xsource.find(ele => ele.id === obj.id);
+		let dungeonlist = tmp.dungeonList.filter(ele => ele !== 0);
 		if(dungeonlist > 0) {
 			if(dungeonlist.length > 1) console.log(`${data.name} drops from more than one dungeon!`);
-			if(xdungeon.find(ele => ele.Id === dungeonlist[0])) {
-				// data.dropdomain = language[xdungeon.find(ele => ele.Id === dungeonlist[0]).DisplayNameTextMapHash]; // artifact domains don't have DisplayNameTextMapHash
+			if(xdungeon.find(ele => ele.id === dungeonlist[0])) {
+				// data.dropdomain = language[xdungeon.find(ele => ele.id === dungeonlist[0]).displayNameTextMapHash]; // artifact domains don't have DisplayNameTextMapHash
 				// data.daysofweek = getDayWeekList(dungeonlist[0], language); 
 			}
 		}
 		// get fishing locations
-		if(getLanguage('EN')[obj.TypeDescTextMapHash] === 'Fish') {
-			let fishId = xfish.find(ele => ele.ItemId === obj.Id).Id;
+		if(getLanguage('EN')[obj.typeDescTextMapHash] === 'Fish') {
+			let fishId = xfish.find(ele => ele.itemId === obj.id).id;
 			let stockIds = xstock.reduce((stockAccum, stockObj) => {
-				if(stockObj._fishWeight[fishId] !== undefined) stockAccum.push(stockObj.Id);
+				if(stockObj._fishWeight[fishId] !== undefined) stockAccum.push(stockObj.id);
 				return stockAccum;
 			}, []);
 			data.fishinglocations = stockIds.reduce((poolAccum, stockId) => {
@@ -100,18 +105,22 @@ function collateMaterial(lang) {
 				return poolAccum;
 			}, []);
 		}
-		const sourcelist = tmp.TextList.concat(tmp.JumpList);
+		const sourcelist = tmp.textList.concat(tmp.jumpList);
 		data.source = sourcelist.map(ele => language[ele]).filter(ele => ele !== ''); // TextList/JumpList
 
-		data.imagename = obj.Icon;
+		data.imagename = obj.icon;
 		if(!data.imagename) console.log(data.name+' has no icon');
 
-		let filename = makeFileName(getLanguage('EN')[obj.NameTextMapHash]);
+		let filename = makeFileName(getLanguage('EN')[obj.nameTextMapHash]);
 		if(filename === '') return accum;
 		if(filename.includes('shrineofdepthskey')) return accum;
 		accum[filename] = data;
 		return accum;
 	}, {});
+
+	// console.log(Object.values(mymaterial).filter(e => e.materialtype === "Material").map(e => e.name));
+	// console.log(Object.values(mymaterial).map(e => e.name));
+
 	return mymaterial;
 }
 

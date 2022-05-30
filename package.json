@@ -1,5 +1,5 @@
 {
   "dependencies": {
-    "fuzzysort": "^1.1.4"
+    "fuzzysort": "^2.0.1"
   }
 }

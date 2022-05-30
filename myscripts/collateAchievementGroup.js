@@ -6,26 +6,26 @@ function collateAchievementGroup(lang) {
 	const language = getLanguage(lang);
 	let myachievementgroup = xgroup.reduce((accum, obj) => {
 		let data = {};
-		data.Id = obj.Id;
+		data.id = obj.id;
 
-		data.name = language[obj.NameTextMapHash];
-		data.sortorder = obj.OrderId;
+		data.name = language[obj.nameTextMapHash];
+		data.sortorder = obj.orderId;
 
-		if(obj.FinishRewardId) {
-			const rewards = xreward.find(e => e.RewardId === obj.FinishRewardId).RewardItemList.filter(f => f.ItemId);
-			if(rewards.length > 1) console.log(`achievementgroup ${obj.Id} has multiple rewards`);
+		if(obj.finishRewardId) {
+			const rewards = xreward.find(e => e.rewardId === obj.finishRewardId).rewardItemList.filter(f => f.itemId);
+			if(rewards.length > 1) console.log(`achievementgroup ${obj.id} has multiple rewards`);
 			data.reward = rewards.map(ele => {
 				return {
-					name: language[xmat.find(mat => mat.Id === ele.ItemId).NameTextMapHash], 
-					// count: ele.ItemCount
+					name: language[xmat.find(mat => mat.id === ele.itemId).nameTextMapHash], 
+					// count: ele.itemCount
 				}; 
 			})[0];
 		}
 
-		data.nameicon = obj.IconPath;
+		data.nameicon = obj.iconPath;
 
 
-		let filename = makeFileName(getLanguage('EN')[obj.NameTextMapHash]);
+		let filename = makeFileName(getLanguage('EN')[obj.nameTextMapHash]);
 		if(filename === '') return accum;
 		if(accum[filename] !== undefined) console.log('filename collision: ' + filename);
 		accum[filename] = data;

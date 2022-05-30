@@ -6,26 +6,26 @@ function collateWindGlider(lang) {
 	const language = getLanguage(lang);
 	let mydata = xfly.reduce((accum, obj) => {
 		let data = {};
-		data.Id = obj.FlycloakId;
+		data.id = obj.flycloakId;
 
-		data.name = language[obj.NameTextMapHash];
-		data.description = sanitizeDescription(language[obj.DescTextMapHash]);
+		data.name = language[obj.nameTextMapHash];
+		data.description = sanitizeDescription(language[obj.descTextMapHash]);
 
-		let flymat = xmat.find(ele => ele.Id === obj.MaterialId) || {};
+		let flymat = xmat.find(ele => ele.id === obj.materialId) || {};
 
-		data.rarity = flymat.RankLevel+"";
-		data.sortorder = obj.FlycloakId;
-		data.ishidden = obj.Hide ? true : undefined;
+		data.rarity = flymat.rankLevel+"";
+		data.sortorder = obj.flycloakId;
+		data.ishidden = obj.hide ? true : undefined;
 
-		// let sauce = xsource.find(ele => ele.Id === obj.Id);
-		// data.source = sauce.TextList.map(ele => language[ele]).filter(ele => ele !== '');
-		data.source = getMatSourceText(obj.MaterialId, language);
+		// let sauce = xsource.find(ele => ele.id === obj.id);
+		// data.source = sauce.textList.map(ele => language[ele]).filter(ele => ele !== '');
+		data.source = getMatSourceText(obj.materialId, language);
 
-		data.nameicon = flymat.Icon;
-		data.namegacha = obj.Icon;
+		data.nameicon = flymat.icon;
+		data.namegacha = obj.icon;
 
 
-		let filename = makeFileName(getLanguage('EN')[obj.NameTextMapHash]);
+		let filename = makeFileName(getLanguage('EN')[obj.nameTextMapHash]);
 		if(filename === '') return accum;
 		if(accum[filename] !== undefined) console.log('filename collision: ' + filename);
 		accum[filename] = data;

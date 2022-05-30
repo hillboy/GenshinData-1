@@ -9,26 +9,26 @@ function collateArtifact(lang) {
 	const xrefine = getExcel('EquipAffixExcelConfigData');
 
 	let myartifact = xsets.reduce((accum, obj) => {
-		if(obj.SetIcon === '') return accum;
+		if(obj.setIcon === '') return accum;
 		let setname;
 		let filename;
 		let data = {};
 
 		// get available rarities
 		data.rarity = xreliccodex.reduce((accum, relic) => {
-			if(obj.SetId !== relic.SuitId) return accum;
-			relic.Level = relic.Level.toString();
-			if(accum.indexOf(relic.Level) === -1) accum.push(relic.Level);
+			if(obj.setId !== relic.suitId) return accum;
+			relic.level = relic.level.toString();
+			if(accum.indexOf(relic.level) === -1) accum.push(relic.level);
 			return accum;
 		}, []);
 
 		// set bonus effects
-		obj.SetNeedNum.forEach((ele, ind) => {
-			let effect = xrefine.find(e => e.AffixId === obj.EquipAffixId*10 + ind);
-			data[ele+'pc'] = language[effect.DescTextMapHash];
+		obj.setNeedNum.forEach((ele, ind) => {
+			let effect = xrefine.find(e => e.affixId === obj.EquipAffixId*10 + ind);
+			data[ele+'pc'] = language[effect.descTextMapHash];
 			if(setname === undefined) {
-				setname = language[effect.NameTextMapHash];
-				filename = makeFileName(getLanguage('EN')[effect.NameTextMapHash]);
+				setname = language[effect.nameTextMapHash];
+				filename = makeFileName(getLanguage('EN')[effect.nameTextMapHash]);
 			}
 		});
 
@@ -39,16 +39,16 @@ function collateArtifact(lang) {
 
 		data.images = {};
 		// relic pieces
-		obj.ContainsList.forEach(ele => {
-			let relic = xrelics.find(e => e.Id === ele);
+		obj.containsList.forEach(ele => {
+			let relic = xrelics.find(e => e.id === ele);
 			let relicdata = {};
-			relicdata.name = language[relic.NameTextMapHash];
-			relicdata.relictype = xmanualtext.find(ele => ele.TextMapId === relic.EquipType).TextMapContentTextMapHash;
+			relicdata.name = language[relic.nameTextMapHash];
+			relicdata.relictype = xmanualtext.find(ele => ele.textMapId === relic.equipType).textMapContentTextMapHash;
 			relicdata.relictype = language[relicdata.relictype];
-			relicdata.description = language[relic.DescTextMapHash];
-			data[relicTypeToPropertyName[relic.EquipType]] = relicdata;
-			data.images['name'+relicTypeToPropertyName[relic.EquipType]] = relic.Icon;
-			data.images[relicTypeToPropertyName[relic.EquipType]] = `https://upload-os-bbs.mihoyo.com/game_record/genshin/equip/${relic.Icon}.png`;
+			relicdata.description = language[relic.descTextMapHash];
+			data[relicTypeToPropertyName[relic.equipType]] = relicdata;
+			data.images['name'+relicTypeToPropertyName[relic.equipType]] = relic.icon;
+			data.images[relicTypeToPropertyName[relic.equipType]] = `https://upload-os-bbs.mihoyo.com/game_record/genshin/equip/${relic.icon}.png`;
 		});
 
 		data.name = setname;

@@ -6,29 +6,29 @@ function collateConstellation(lang) {
 		// bad practice to declare functions inside loop but i need to be able to call it multiple times for players
 		function dowork() {
 			let data = {};
-			let depot = xskilldepot.find(ele => ele.Id === obj.SkillDepotId);
-			if(depot === undefined || depot.EnergySkill === undefined) return; // not a finished (traveler) character
-			if(depot.TalentStarName === '') return; // unfinished
+			let depot = xskilldepot.find(ele => ele.id === obj.skillDepotId);
+			if(depot === undefined || depot.energySkill === undefined) return; // not a finished (traveler) character
+			if(depot.talentStarName === '') return; // unfinished
 
-			data.name = language[obj.NameTextMapHash];
-			if(isPlayer(obj)) data.name += ` (${language[elementTextMapHash[getPlayerElement(obj.SkillDepotId)]]})`
+			data.name = language[obj.nameTextMapHash];
+			if(isPlayer(obj)) data.name += ` (${language[elementTextMapHash[getPlayerElement(obj.skillDepotId)]]})`
 			//console.log(depot)
 			data.images = {};
-			let stars = depot.Talents.map(talentId => xconstellation.find(ele => ele.TalentId === talentId));
+			let stars = depot.talents.map(talentId => xconstellation.find(ele => ele.talentId === talentId));
 			for(let i = 1; i <= 6; i++) {
 				data['c'+i] = {
-					name: sanitizeDescription(language[stars[i-1].NameTextMapHash]),
-					effect: sanitizeDescription(language[stars[i-1].DescTextMapHash])
+					name: sanitizeDescription(language[stars[i-1].nameTextMapHash]),
+					effect: sanitizeDescription(language[stars[i-1].descTextMapHash])
 				};
-				data.images['c'+i] = `https://upload-os-bbs.mihoyo.com/game_record/genshin/constellation_icon/${stars[i-1].Icon}.png`;
+				data.images['c'+i] = `https://upload-os-bbs.mihoyo.com/game_record/genshin/constellation_icon/${stars[i-1].icon}.png`;
 			}
 
-			accum[avatarIdToFileName[isPlayer(obj) ? obj.SkillDepotId : obj.Id]] = data;
+			accum[avatarIdToFileName[isPlayer(obj) ? obj.skillDepotId : obj.id]] = data;
 		}
 
 		if(isPlayer(obj)) {
-			obj.CandSkillDepotIds.forEach(ele => {
-				obj.SkillDepotId = ele;
+			obj.candSkillDepotIds.forEach(ele => {
+				obj.skillDepotId = ele;
 				dowork();
 			});
 		} else {

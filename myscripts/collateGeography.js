@@ -8,21 +8,20 @@ function collageGeography(lang) {
 	let mygeography = xview.reduce((accum, obj) => {
 
 		let data = {};
-		data.Id = obj.Id;
+		data.id = obj.Id;
 
-		data.name = language[obj.NameTextMapHash];
-		data.area = language[xarea.find(area => area.ID === obj.WorldAreaId).AreaNameTextMapHash];
-		data.description = sanitizeDescription(language[obj.DescTextMapHash]);
-		data.region = language[xcity.find(city => city.CityId === obj.CityId).CityNameTextMapHash];
-		data.hiddenactive = obj.IsSeenActive ? true : undefined;
+		data.name = language[obj.nameTextMapHash];
+		data.area = language[xarea.find(area => area.ID === obj.worldAreaId).AreaNameTextMapHash];
+		data.description = sanitizeDescription(language[obj.descTextMapHash]);
+		data.region = language[xcity.find(city => city.cityId === obj.cityId).cityNameTextMapHash];
+		data.showonlyunlocked = obj.showOnlyUnlocked ? true : undefined;
 		data.sortorder = obj.SortOrder;
 
+		// console.log(obj.cityID);
 
-		// console.log(obj.CityID);
+		data.nameimage = obj.image;
 
-		data.nameimage = obj.Image;
-
-		let filename = makeFileName(getLanguage('EN')[obj.NameTextMapHash]);
+		let filename = makeFileName(getLanguage('EN')[obj.nameTextMapHash]);
 		if(filename === '') return accum;
 		if(accum[filename] !== undefined) console.log('filename collision: ' + filename);
 		accum[filename] = data;

@@ -26,32 +26,32 @@ function collateCommission(lang) {
 	const language = getLanguage(lang);
 	let mydata = xdaily.reduce((accum, obj) => {
 		let data = {};
-		data.Id = obj.ID;
+		data.id = obj.iD;
 
-		data.name = language[obj.TitleTextMapHash];
-		data.description = sanitizeDescription(language[obj.DescriptionTextMapHash]);
-		data.target = sanitizeDescription(language[obj.TargetTextMapHash]);
+		data.name = language[obj.titleTextMapHash];
+		data.description = sanitizeDescription(language[obj.descriptionTextMapHash]);
+		data.target = sanitizeDescription(language[obj.targetTextMapHash]);
 
-		data.city = language[xcity.find(e => e.CityId === obj.CityId).CityNameTextMapHash];
+		data.city = language[xcity.find(e => e.cityId === obj.cityId).cityNameTextMapHash];
 
-		const taskreward = xtaskreward.find(e => e.ID === obj.TaskRewardId);
+		const taskreward = xtaskreward.find(e => e.iD === obj.taskRewardId);
 		data.rewardpreviews = {};
 		for(let i = 0; i < 12; i++) {
-			let rewardpreview = xpreview.find(pre => pre.Id === taskreward.DropVec[i].PreviewRewardId).PreviewItems.filter(pre => pre.Id);
+			let rewardpreview = xpreview.find(pre => pre.id === taskreward.dropVec[i].previewRewardId).previewItems.filter(pre => pre.id);
 			data.rewardpreviews[mapRewardToAR[i]] = rewardpreview.map(repre => {
-				let mat = xmat.find(m => m.Id === repre.Id);
-				let reward = { name: language[mat.NameTextMapHash] };
-				reward.count = parseInt(repre.Count);
-				if(repre.Count.includes(';')) reward.countmax = parseInt(repre.Count.substring(repre.Count.indexOf(';')+1));
+				let mat = xmat.find(m => m.id === repre.id);
+				let reward = { name: language[mat.nameTextMapHash] };
+				reward.count = parseInt(repre.count);
+				if(repre.count.includes(';')) reward.countmax = parseInt(repre.count.substring(repre.count.indexOf(';')+1));
 				return reward;
 			});
 		}
 
 
-		data.TaskRewardId = obj.TaskRewardId
+		data.taskRewardId = obj.taskRewardId
 
 
-		let filename = makeFileName(getLanguage('EN')[obj.TitleTextMapHash]);
+		let filename = makeFileName(getLanguage('EN')[obj.titleTextMapHash]);
 		if(filename === '') return accum;
 		while(accum[filename] !== undefined) {
 			filename += 'a';

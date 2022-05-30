@@ -15,7 +15,7 @@ const langcodes = ['CHS', 'CHT', 'DE', 'EN', 'ES', 'FR', 'ID', 'JP', 'KR', 'PT',
 
 
 // const weaponIdToFileName = xweapon.reduce((accum, obj) => {
-// 	accum[obj.Id] = 
+// 	accum[obj.id] = 
 
 // }, {})
 
@@ -23,8 +23,8 @@ const langcodes = ['CHS', 'CHT', 'DE', 'EN', 'ES', 'FR', 'ID', 'JP', 'KR', 'PT',
 // UNUSED object map that converts AvatarAssocType into a TextMapHash
 const assocTextMapHash = ['ASSOC_TYPE_MONDSTADT', 'ASSOC_TYPE_LIYUE', 'ASSOC_TYPE_FATUI'];
 
-global.isPlayer = function(data) { return data.CandSkillDepotIds && data.CandSkillDepotIds.length !== 0; }
-global.getPlayerElement = function(SkillDepotId) { let tmp = xskilldepot.find(ele => ele.Id === SkillDepotId); return tmp === undefined ? tmp : tmp.TalentStarName.split('_').pop(); }
+global.isPlayer = function(data) { return data.candSkillDepotIds && data.candSkillDepotIds.length !== 0; }
+global.getPlayerElement = function(SkillDepotId) { let tmp = xskilldepot.find(ele => ele.id === SkillDepotId); return tmp === undefined ? tmp : tmp.talentStarName.split('_').pop(); }
 global.getLanguage = function(abbriev) { return getTextMap(abbriev.toUpperCase()); }
 global.normalizeStr = function(str) { return str.normalize('NFD').replace(/[\u0300-\u036f]/g, ''); }
 global.makeFileName = function(str, lang) { return normalizeStr(str).toLowerCase().replace(/[^a-z]/g,''); }
@@ -34,26 +34,26 @@ global.capitalizeFirst = function(str) { return str[0].toUpperCase() + str.toLow
 global.replaceLayout = function(str) { return str.replace(/{LAYOUT_MOBILE#.*?}{LAYOUT_PC#(.*?)}{LAYOUT_PS#.*?}/gi,'$1').replace('#','').replaceAll('{NON_BREAK_SPACE}', ' '); }
 global.replaceNewline = function(str) { return str.replace(/\\n/gi, '\n'); }
 global.sanitizeDescription = function(str) { return replaceNewline(replaceLayout(stripHTML(convertBold(str || '')))); }
-global.getMatSourceText = function(id, textmap) { return getExcel('MaterialSourceDataExcelConfigData').find(e => e.Id === id).TextList.map(e => textmap[e]).filter(e => e !== ''); }
+global.getMatSourceText = function(id, textmap) { return getExcel('MaterialSourceDataExcelConfigData').find(e => e.id === id).textList.map(e => textmap[e]).filter(e => e !== ''); }
 /* ======================================================================================= */
 
 // object map that converts the genshin coded element into a TextMapHash
 global.elementTextMapHash = ['Fire', 'Water', 'Grass', 'Electric', 'Wind', 'Ice', 'Rock'].reduce((accum, element) => {
-	accum[element] = xmanualtext.find(ele => ele.TextMapId === element).TextMapContentTextMapHash;
+	accum[element] = xmanualtext.find(ele => ele.textMapId === element).textMapContentTextMapHash;
 	return accum;
 }, {});
 
-global.xplayableAvatar = xavatar.filter(obj => obj.AvatarPromoteId !== 2 || obj.Id === 10000002); // array
+global.xplayableAvatar = xavatar.filter(obj => obj.avatarPromoteId !== 2 || obj.id === 10000002); // array
 // object map that converts an avatar Id or traveler SkillDepotId to filename
 global.avatarIdToFileName = xplayableAvatar.reduce((accum, obj) => {
-	if(obj.Id === 10000005) accum[obj.Id] = 'aether';
-	else if(obj.Id === 10000007) accum[obj.Id] = 'lumine';
-	else accum[obj.Id] = makeFileName(getLanguage('EN')[obj.NameTextMapHash]);
+	if(obj.id === 10000005) accum[obj.id] = 'aether';
+	else if(obj.id === 10000007) accum[obj.id] = 'lumine';
+	else accum[obj.id] = makeFileName(getLanguage('EN')[obj.nameTextMapHash]);
 	if(isPlayer(obj)) { // 
-		obj.CandSkillDepotIds.forEach(skdeId => {
+		obj.candSkillDepotIds.forEach(skdeId => {
 			let trelement = elementTextMapHash[getPlayerElement(skdeId)];
 			if(trelement === undefined) return;
-			accum[skdeId] = makeFileName(getLanguage('EN')[obj.NameTextMapHash] + getLanguage('EN')[trelement]); 
+			accum[skdeId] = makeFileName(getLanguage('EN')[obj.nameTextMapHash] + getLanguage('EN')[trelement]); 
 		})
 	}
 	return accum;
@@ -61,18 +61,18 @@ global.avatarIdToFileName = xplayableAvatar.reduce((accum, obj) => {
 
 // object map that converts a WeaponType into a TextMapHash
 global.weaponTextMapHash = ['WEAPON_SWORD_ONE_HAND', 'WEAPON_CATALYST', 'WEAPON_CLAYMORE', 'WEAPON_BOW', 'WEAPON_POLE'].reduce((accum, str) => {
-	accum[str] = xmanualtext.find(ele => ele.TextMapId === str).TextMapContentTextMapHash;
+	accum[str] = xmanualtext.find(ele => ele.textMapId === str).textMapContentTextMapHash;
 	return accum;
 }, {});
 
 // translates day of the week. 1 => Monday, etc. Returns textmaphash
 global.dayOfWeek = function(num) {
-	return xmanualtext.find(ele => ele.TextMapId === 'UI_ABYSSUS_DATE'+num).TextMapContentTextMapHash;
+	return xmanualtext.find(ele => ele.textMapId === 'UI_ABYSSUS_DATE'+num).textMapContentTextMapHash;
 }
 
 const xcity = getExcel('CityConfigData');
 // adds Snezhnaya manually
-if(!xcity.find(ele => getLanguage('EN')[ele.CityNameTextMapHash] === 'Snezhnaya')) {
+if(!xcity.find(ele => getLanguage('EN')[ele.cityNameTextMapHash] === 'Snezhnaya')) {
 	getLanguage('CHS')['Snezhnaya'] = '至冬国';
 	getLanguage('CHT')['Snezhnaya'] = '至冬國';
 	getLanguage('DE')['Snezhnaya'] = 'Snezhnaya';
@@ -87,7 +87,7 @@ if(!xcity.find(ele => getLanguage('EN')[ele.CityNameTextMapHash] === 'Snezhnaya'
 	getLanguage('TH')['Snezhnaya'] = 'Snezhnaya';
 	getLanguage('VI')['Snezhnaya'] = 'Snezhnaya';
 
-	xcity.push({ CityId: 8758412, CityNameTextMapHash: 'Snezhnaya'})
+	xcity.push({ cityId: 8758412, cityNameTextMapHash: 'Snezhnaya'})
 }
 
 /* =========================================================================================== */
@@ -97,10 +97,10 @@ function exportCurve(folder, file) {
 	let output = {};
 	xcurve.forEach(ele => {
 		let curveinfo = {};
-		ele.CurveInfos.forEach(ele => {
-			curveinfo[ele.Type] = ele.Value;
+		ele.curveInfos.forEach(ele => {
+			curveinfo[ele.type] = ele.value;
 		});
-		output[ele.Level] = curveinfo;
+		output[ele.level] = curveinfo;
 	});
 	fs.mkdirSync(`./export/curve`, { recursive: true });
 	fs.writeFileSync(`./export/curve/${folder}.json`, JSON.stringify(output, null, '\t'));
@@ -128,24 +128,26 @@ function exportData(folder, collateFunc, englishonly, skipwrite) {
 // exportCurve('weapons', 'WeaponCurveExcelConfigData')
 // exportData('artifacts', require('./collateArtifact.js'));
 // exportData('foods', require('./collateFood'));
-// exportData('materials', require('./collateMaterial'), false); // change: used both TextList/JumpList. temp removed dropdomain/daysofweek
+// exportData('materials', require('./collateMaterial')); // change: used both TextList/JumpList. temp removed dropdomain/daysofweek
 // exportData('domains', require('./collateDomain')); // run twice // remember to add back recommendedelements and disorder and entrypicpath
-// exportData('enemies', require('./collateEnemy'), true);
+// exportData('enemies', require('./collateEnemy'));
 // exportCurve('enemies', 'MonsterCurveExcelConfigData');
 
 // exportData('domains', require('./collateDomainMonsterList')); // MUST do run only after both domains and enemies have run. sync.
 
-// exportData('outfits', require('./collateOutfit')); // Fix obfuscated keys!
+// exportData('outfits', require('./collateOutfit')); // Fix obfuscated keys after every version update
 // exportData('windgliders', require('./collateWindGlider'));
-// exportData('animals', require('./collateAnimal'));
+// exportData('animals', require('./collateAnimal')); // Fix obfuscated keys after every version update
 // exportData('namecards', require('./collateNamecard'));
 // exportData('geographies', require('./collateGeography'));
 // exportData('achievements', require('./collateAchievement'));
 // exportData('achievementgroups', require('./collateAchievementGroup'));
-// exportData('commissions', require('./collateCommission'), true);
-exportData('voiceovers', require('./collateVoiceover'), true);
+// exportData('adventureranks', require('./collateAdventureRank'));
 
-// // exportData('fishingpoints', require('./collateFishingPoint')); 
+// exportData('commissions', require('./collateCommission'), true); // unfinished
+// exportData('voiceovers', require('./collateVoiceover'), true); // unfinished
+
+// // exportData('fishingpoints', require('./collateFishingPoint'));  // unfinished
 
 //console.log(collateCharacter('EN'))
 //console.log(collateConstellation('EN').hutao)

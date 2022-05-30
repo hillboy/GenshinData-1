@@ -4,12 +4,12 @@ const xsource = getExcel('MaterialSourceDataExcelConfigData');
 const xspecialty = getExcel('CookBonusExcelConfigData');
 const xavatar = getExcel('AvatarExcelConfigData');
 
-function getSpecialty(id) { return xspecialty.find(ele => ele.RecipeId === id); }
-function getMaterial(id) { return xmaterial.find(ele => ele.Id === id); }
-function getAvatar(id) { return xavatar.find(ele => ele.Id === id); }
+function getSpecialty(id) { return xspecialty.find(ele => ele.recipeId === id); }
+function getMaterial(id) { return xmaterial.find(ele => ele.id === id); }
+function getAvatar(id) { return xavatar.find(ele => ele.id === id); }
 function getManualTextMapHash(id) { 
 	if(id === 'COOK_FOOD_DEFENSE') id = 'COOK_FOOD_DEFENCE';
-	return xmanualtext.find(ele => ele.TextMapId === id).TextMapContentTextMapHash;
+	return xmanualtext.find(ele => ele.textMapId === id).textMapContentTextMapHash;
 }
 
 const mapQualityToProp = {
@@ -22,75 +22,75 @@ function collateFood(lang) {
 	const language = getLanguage(lang);
 
 	let myfood = xrecipe.reduce((accum, obj) => {
-		//if(obj.Id !== 1003) return accum;
+		//if(obj.id !== 1003) return accum;
 
 		let data = {};
 
-		data.name = language[obj.NameTextMapHash];
-		data.Id = obj.Id;
-		data.rarity = obj.RankLevel;
+		data.name = language[obj.nameTextMapHash];
+		data.id = obj.id;
+		data.rarity = obj.rankLevel;
 		data.foodtype = 'NORMAL';
-		data.foodfilter = language[getManualTextMapHash(obj.FoodType)];
+		data.foodfilter = language[getManualTextMapHash(obj.foodType)];
 		data.foodcategory = undefined;
-		data.effect = obj.EffectDesc.reduce((accum, eff) => {
+		data.effect = obj.effectDesc.reduce((accum, eff) => {
 			const tmp = replaceLayout(stripHTML(language[eff]));
 			if(tmp) accum.push(tmp);
 			return accum;
 		}, []).join('\n');
-		data.description = sanitizeDescription(language[obj.DescTextMapHash]);
+		data.description = sanitizeDescription(language[obj.descTextMapHash]);
 		// check error
-		for(let i = 2; i <= 3; i++) { const tmp = language[obj.EffectDesc[i]]; if(tmp) console.log(`${obj.Id} ${data.name}: ${tmp}`); }
+		for(let i = 2; i <= 3; i++) { const tmp = language[obj.effectDesc[i]]; if(tmp) console.log(`${obj.id} ${data.name}: ${tmp}`); }
 
 		// get suspicious, normal, delicious
-		for(let xd of obj.QualityOutputVec) {
-			xd = getMaterial(xd.Id);
+		for(let xd of obj.qualityOutputVec) {
+			xd = getMaterial(xd.id);
 			let subdata = {};
-			if(language[xd.InteractionTitleTextMapHash]) console.log(`food ${obj.Id} has interaction`);
-			if(language[xd.SpecialDescTextMapHash]) console.log(`food ${obj.Id} has special`);
-			subdata.effect = language[xd.EffectDescTextMapHash];
-			subdata.description = sanitizeDescription(language[xd.DescTextMapHash]);
-			data[mapQualityToProp[xd.FoodQuality]] = subdata;
-			data.foodcategory = xd.EffectIcon.substring(13);
+			if(language[xd.interactionTitleTextMapHash]) console.log(`food ${obj.id} has interaction`);
+			if(language[xd.specialDescTextMapHash]) console.log(`food ${obj.id} has special`);
+			subdata.effect = language[xd.effectDescTextMapHash];
+			subdata.description = sanitizeDescription(language[xd.descTextMapHash]);
+			data[mapQualityToProp[xd.foodQuality]] = subdata;
+			data.foodcategory = xd.effectIcon.substring(13);
 		}
-		data.ingredients = obj.InputVec.reduce((accum, ing) => {
-			if(ing.Id === undefined) return accum;
-			const mat = getMaterial(ing.Id);
-			accum.push({ name: language[mat.NameTextMapHash], count: ing.Count });
+		data.ingredients = obj.inputVec.reduce((accum, ing) => {
+			if(ing.id === undefined) return accum;
+			const mat = getMaterial(ing.id);
+			accum.push({ name: language[mat.nameTextMapHash], count: ing.count });
 			return accum;
 		}, []);
 		// data.source = 
-		data.imagename = obj.Icon;
+		data.imagename = obj.icon;
 
-		accum[makeFileName(getLanguage('EN')[obj.NameTextMapHash])] = data;
+		accum[makeFileName(getLanguage('EN')[obj.nameTextMapHash])] = data;
 
 		// check if there is a specialty
-		let myspec = getSpecialty(obj.Id);
+		let myspec = getSpecialty(obj.id);
 		if(myspec === undefined) return accum;
-		let xd = getMaterial(myspec.ParamVec[0]);
+		let xd = getMaterial(myspec.paramVec[0]);
 		// if(xd === undefined) return accum;
 		let foodfilter = data.foodfilter;
 		let basedish = data.name;
 		let ingredients = data.ingredients;
 
 		let spdata = {};
-		spdata.name = language[xd.NameTextMapHash];
-		spdata.rarity = xd.RankLevel;
+		spdata.name = language[xd.nameTextMapHash];
+		spdata.rarity = xd.rankLevel;
 		spdata.foodtype = 'SPECIALTY';
 		spdata.foodfilter = foodfilter;
-		spdata.foodcategory = xd.EffectIcon.substring(13);
+		spdata.foodcategory = xd.effectIcon.substring(13);
 
-		if(language[xd.InteractionTitleTextMapHash]) console.log(`specialty ${obj.Id} has interaction`);
-		if(language[xd.SpecialDescTextMapHash]) console.log(`specialty ${obj.Id} has special`);
-		spdata.effect = replaceLayout(language[xd.EffectDescTextMapHash]);
-		spdata.description = sanitizeDescription(language[xd.DescTextMapHash]);
+		if(language[xd.interactionTitleTextMapHash]) console.log(`specialty ${obj.id} has interaction`);
+		if(language[xd.specialDescTextMapHash]) console.log(`specialty ${obj.id} has special`);
+		spdata.effect = replaceLayout(language[xd.effectDescTextMapHash]);
+		spdata.description = sanitizeDescription(language[xd.descTextMapHash]);
 
 		spdata.basedish = basedish;
-		spdata.character = language[getAvatar(myspec.AvatarId).NameTextMapHash];
+		spdata.character = language[getAvatar(myspec.avatarId).nameTextMapHash];
 		
 		spdata.ingredients = ingredients;
-		spdata.imagename = xd.Icon;
+		spdata.imagename = xd.icon;
 
-		accum[makeFileName(getLanguage('EN')[xd.NameTextMapHash])] = spdata;
+		accum[makeFileName(getLanguage('EN')[xd.nameTextMapHash])] = spdata;
 		return accum;
 	}, {});
 	// console.log(myfood);

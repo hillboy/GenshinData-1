@@ -4,26 +4,31 @@ const xcodex = getExcel('AnimalCodexExcelConfigData');
 const xdescribe = getExcel('AnimalDescribeExcelConfigData');
 const xcapture = getExcel('CaptureExcelConfigData');
 
+// FIX THIS EVERY VERSION
+const propCOUNTTYPE = "OCCLHPBCDGL";
+
 function collateAnimal(lang) {
 	const language = getLanguage(lang);
 	let mydata = xcodex.reduce((accum, obj) => {
-		if(obj.Type === 'CODEX_MONSTER') return accum;
-		if(obj.IsDeleteWatcherAfterFinish) return accum;
+		if(obj.type === 'CODEX_MONSTER') return accum;
+		if(obj.isDisuse) return accum;
 		let data = {};
-		data.Id = obj.Id;
+		data.id = obj.Id;
 
-		let mydescribe = xdescribe.find(ele => ele.Id === obj.DescribeId);
+		let mydescribe = xdescribe.find(ele => ele.id === obj.describeId);
 
-		data.name = language[mydescribe.NameTextMapHash];
-		data.description = sanitizeDescription(language[obj.DescTextMapHash]);
-		data.category = language[xmanualtext.find(ele => ele.TextMapId === `UI_CODEX_ANIMAL_CATEGORY_${obj.SubType.substring(obj.SubType.lastIndexOf('_')+1)}`).TextMapContentTextMapHash]
-		data.capturable = xcapture.find(ele => ele.MonsterID === obj.Id) ? true : undefined;
+		data.name = language[mydescribe.nameTextMapHash];
+		data.description = sanitizeDescription(language[obj.descTextMapHash]);
+		data.category = language[xmanualtext.find(ele => ele.textMapId === `UI_CODEX_ANIMAL_CATEGORY_${obj.subType.substring(obj.subType.lastIndexOf('_')+1)}`).textMapContentTextMapHash]
+		// data.capturable = xcapture.find(ele => ele.monsterID === obj.Id) ? true : undefined;
+		let counttype = obj[propCOUNTTYPE] || "_NONE";
+		data.counttype = counttype.substring(counttype.lastIndexOf('_')+1);
 		data.sortorder = obj.SortOrder;
 
-		data.nameicon = mydescribe.Icon;
+		data.nameicon = mydescribe.icon;
 
 
-		let filename = makeFileName(getLanguage('EN')[mydescribe.NameTextMapHash]);
+		let filename = makeFileName(getLanguage('EN')[mydescribe.nameTextMapHash]);
 		if(filename === '') return accum;
 		if(accum[filename] !== undefined) console.log('filename collision: ' + filename);
 		accum[filename] = data;

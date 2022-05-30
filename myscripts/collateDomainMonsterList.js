@@ -15,10 +15,10 @@ const monsterMap = {
 	"bless dance steel iv": ['pyro agent', 'fa el ci mage', 'th pyro pot', 'th hy pot', 'th el pot', 'th cry pot', 'th seaman'],
 	"bless dance steel v": ['pyro agent', 'fa el ci mage', 'th cry pot'],
 
-	"bless elegaic r i": ['cr slime', 'la cry slime', 'ice shield mita'],
-	"bless elegaic r ii": ['cr slime', 'la cr slime', 'cr hili grenad', 'ice shield mita'],
-	"bless elegaic r iii": ['la cr slime', 'cr hili grenad', 'ice shield mita', 'cr ab mage'],
-	"bless elegaic r iv": ['frostarm lawa', 'cr ab mage'],
+	"bless eleg r i": ['cr slime', 'la cry slime', 'ice shield mita'],
+	"bless eleg r ii": ['cr slime', 'la cr slime', 'cr hili grenad', 'ice shield mita'],
+	"bless eleg r iii": ['la cr slime', 'cr hili grenad', 'ice shield mita', 'cr ab mage'],
+	"bless eleg r iv": ['frostarm lawa', 'cr ab mage'],
 
 	"bless fire puri i": ['cryo slime', 'large cryo slime', 'large hydro slime', 'wood shield hili guard', 'cryo mage'],
 	"bless fire puri ii": ['elec slime', 'lar elec slime', 'muta ele slime', 'fat ele cic mage'],
@@ -174,12 +174,12 @@ function collateDomainMonsterList(lang) {
 	let mydomain = require(`./export/${lang}/domains.json`);
 
 	for(let [dom, monList] of Object.entries(autoMonsterMap)) {
-		const domId = Object.values(ENdomain).find(ele => ele.name === dom).Id;
-		const monNameHashList = monList.map(ele => Object.values(ENmonster).find(tmp => tmp.name === ele).NameTextMapHash);
+		const domId = Object.values(ENdomain).find(ele => ele.name === dom).id;
+		const monNameHashList = monList.map(ele => Object.values(ENmonster).find(tmp => tmp.name === ele).nameTextMapHash);
 
 		const monsterlist = monNameHashList.map(NameTextMapHash => language[NameTextMapHash]);
 
-		Object.values(mydomain).find(ele => ele.Id === domId).monsterlist = monsterlist;
+		Object.values(mydomain).find(ele => ele.id === domId).monsterlist = monsterlist;
 	}
 
 	for(let dom of Object.values(mydomain)) {

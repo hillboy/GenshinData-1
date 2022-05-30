@@ -10,37 +10,37 @@ function collateVoiceover(lang) {
 
 	let mynamecard = xplayableAvatar.reduce((accum, obj) => {
 		let data = {};
-		data.Id = obj.Id;
+		data.id = obj.id;
 
-		data.name = language[obj.NameTextMapHash];
-		if(isPlayer(obj)) data.name = language[playerIdToTextMapHash[obj.Id]];
+		data.name = language[obj.nameTextMapHash];
+		if(isPlayer(obj)) data.name = language[playerIdToTextMapHash[obj.id]];
 
 		data.story = [];
 		data.combat = [];
-		let xvoices = xfetter.filter(ele => ele.AvatarId === obj.Id);
+		let xvoices = xfetter.filter(ele => ele.avatarId === obj.id);
 		xvoices.forEach(ele => {
 			let tmp = { 
-				Id: ele.FetterId, // DEBUG
-				title: language[ele.VoiceTitleTextMapHash],
-				text: sanitizeDescription(language[ele.VoiceFileTextTextMapHash]),
-				unlock: ele.Tips.map(e => language[e]).filter(e => e !== '') // TextList/JumpList
+				Id: ele.fetterId, // DEBUG
+				title: language[ele.voiceTitleTextMapHash],
+				text: sanitizeDescription(language[ele.voiceFileTextTextMapHash]),
+				unlock: ele.tips.map(e => language[e]).filter(e => e !== '') // TextList/JumpList
 			}
 			if(tmp.unlock.length === 0) delete tmp.unlock;
 			
-			if(ele.IsHiden === 1) data.story.push(tmp);
-			else if(ele.IsHiden === 2) data.combat.push(tmp);
-			else console.log('unknown voiceover tab: ' + ele.FetterId);
+			if(ele.isHiden === 1) data.story.push(tmp);
+			else if(ele.isHiden === 2) data.combat.push(tmp);
+			else console.log('unknown voiceover tab: ' + ele.fetterId);
 		});
 
 
-		// data.description = sanitizeDescription(language[obj.DescTextMapHash]);
-		// data.sortorder = obj.Id;
+		// data.description = sanitizeDescription(language[obj.descTextMapHash]);
+		// data.sortorder = obj.id;
 
-		// let sauce = xsource.find(ele => ele.Id === obj.Id);
-		// data.source = sauce.TextList.map(ele => language[ele]).filter(ele => ele !== '');
+		// let sauce = xsource.find(ele => ele.id === obj.id);
+		// data.source = sauce.textList.map(ele => language[ele]).filter(ele => ele !== '');
 
 
-		let filename = makeFileName(getLanguage('EN')[isPlayer(obj) ? playerIdToTextMapHash[obj.Id] : obj.NameTextMapHash]);
+		let filename = makeFileName(getLanguage('EN')[isPlayer(obj) ? playerIdToTextMapHash[obj.id] : obj.nameTextMapHash]);
 		if(filename === '') return accum;
 		if(accum[filename] !== undefined) console.log('filename collision: ' + filename);
 		accum[filename] = data;

@@ -5,9 +5,9 @@ const xavatar = getExcel('AvatarExcelConfigData');
 
 // for AvatarCostumeExcelConfigData
 const propertyMap = {
-	Id: 'OBACDKHOCAM', // 200301
-	AvatarId: 'BPAMNILGFPK', // 10000003
-	IconName: 'DANEMGDCNIM' // UI_AvatarIcon_QinCostumeSea
+	id: 'GMECDCKBFJM', // 200301
+	avatarId: 'FMAJGGBGKKN', // 10000003
+	iconName: 'FOINIGFDKIP' // UI_AvatarIcon_QinCostumeSea
 }
 
 // taken from collateCharacter.js
@@ -18,43 +18,43 @@ function collateOutfit(lang) {
 	let myoutfit = xcostume.reduce((accum, obj) => {
 
 		let data = {};
-		data.Id = obj[propertyMap.Id];
+		data.id = obj[propertyMap.id];
 
-		data.name = language[obj.NameTextMapHash];
-		data.description = sanitizeDescription(language[obj.DescTextMapHash]);
+		data.name = language[obj.nameTextMapHash];
+		data.description = sanitizeDescription(language[obj.descTextMapHash]);
 
-		data.isdefault = obj.IsDefault === true;
+		data.isdefault = obj.isDefault === true;
 
-		const AvatarId = obj[propertyMap.AvatarId];
+		const AvatarId = obj[propertyMap.avatarId];
 		if(playerIdToTextMapHash[AvatarId])
 			data.character = language[playerIdToTextMapHash[AvatarId]];
 		else
-			data.character = language[xavatar.find(ele => ele.Id === obj[propertyMap.AvatarId]).NameTextMapHash];
+			data.character = language[xavatar.find(ele => ele.id === obj[propertyMap.avatarId]).nameTextMapHash];
 
-		if(obj.ItemId) {
-			let sauce = xsource.find(ele => ele.Id === obj.ItemId);
-			data.source = sauce.TextList.map(ele => language[ele]).filter(ele => ele !== '');
+		if(obj.itemId) {
+			let sauce = xsource.find(ele => ele.id === obj.itemId);
+			data.source = sauce.textList.map(ele => language[ele]).filter(ele => ele !== '');
 
-			data.namecard = xmat.find(ele => ele.Id === obj.ItemId).Icon;
+			data.namecard = xmat.find(ele => ele.id === obj.itemId).icon;
 		} else {
 			data.namecard = 'UI_AvatarIcon_Costume_Card';
 		}
 
-		if(obj[propertyMap.IconName]) {
-			data.nameicon = obj[propertyMap.IconName];
+		if(obj[propertyMap.iconName]) {
+			data.nameicon = obj[propertyMap.iconName];
 			const name = data.nameicon.slice(data.nameicon.lastIndexOf('_')+1);
 			data.namesplash = `UI_Costume_${name}`;
 		}
-		if(obj.SideIconName)
-			data.namesideicon = obj.SideIconName;
+		if(obj.sideIconName)
+			data.namesideicon = obj.sideIconName;
 
 
 
-		// data.nameicon = obj.Icon;
-		// data.namebanner = obj.UseParam[0] !== "" ? obj.UseParam[0] : undefined;
-		// data.namebackground = obj.UseParam[1];
+		// data.nameicon = obj.icon;
+		// data.namebanner = obj.useParam[0] !== "" ? obj.useParam[0] : undefined;
+		// data.namebackground = obj.useParam[1];
 
-		let filename = makeFileName(getLanguage('EN')[obj.NameTextMapHash]);
+		let filename = makeFileName(getLanguage('EN')[obj.nameTextMapHash]);
 		if(filename === '') return accum;
 		if(filename === 'defaultoutfit') return accum;
 		if(playerIdToTextMapHash[AvatarId])

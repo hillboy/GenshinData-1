@@ -6,19 +6,19 @@ const xmat = getExcel('MaterialExcelConfigData');
 function collateAchievement(lang) {
 	const language = getLanguage(lang);
 	let myachievement = xachieve.reduce((accum, obj) => {
-		if(obj.IsDeleteWatcherAfterFinish === true) {
-			// console.log(`disuse: ${obj.Id} ${language[obj.TitleTextMapHash]}`)
+		if(obj.isDisuse === true) {
+			// console.log(`disuse: ${obj.id} ${language[obj.titleTextMapHash]}`)
 			return accum;
 		}
-		if(obj.Id === 84517) return accum; // Instant Karma achievement is unobtainable
+		if(obj.id === 84517) return accum; // Instant Karma achievement is unobtainable
 
-		if(obj.PreStageAchievementId) {
-			if(language[obj.DescTextMapHash] === '') return accum;
-			let data = Object.values(accum).find(ele => ele.Id.includes(obj.PreStageAchievementId));
-			data.Id.push(obj.Id);
+		if(obj.preStageAchievementId) {
+			if(language[obj.descTextMapHash] === '') return accum;
+			let data = Object.values(accum).find(ele => ele.id.includes(obj.preStageAchievementId));
+			data.id.push(obj.id);
 
 			data.stages = data.stages + 1;
-			if(data.stages > 3) console.log(`achievement ${obj.Id} has more than 3 stages`);
+			if(data.stages > 3) console.log(`achievement ${obj.id} has more than 3 stages`);
 
 			data['stage'+data.stages] = addStage(obj, language);
 
@@ -26,24 +26,24 @@ function collateAchievement(lang) {
 		}
 
 		let data = {};
-		data.Id = [obj.Id];
+		data.id = [obj.id];
 
-		data.name = language[obj.TitleTextMapHash];
+		data.name = language[obj.titleTextMapHash];
 		if(data.name === '') return accum;
 
-		data.achievementgroup = language[xgoal.find(e => e.Id === obj.GoalId).NameTextMapHash];
-		data.ishidden = obj.IsShow === 'SHOWTYPE_HIDE' ? true : undefined;
-		data.sortorder = obj.OrderId;
+		data.achievementgroup = language[xgoal.find(e => e.id === obj.goalId).nameTextMapHash];
+		data.ishidden = obj.isShow === 'SHOWTYPE_HIDE' ? true : undefined;
+		data.sortorder = obj.orderId;
 		data.stages = 1;
 
 		data['stage'+data.stages] = addStage(obj, language);
 
 
-		let filename = makeFileName(getLanguage('EN')[obj.TitleTextMapHash]);
+		let filename = makeFileName(getLanguage('EN')[obj.titleTextMapHash]);
 		if(filename === '') return accum;
 		if(accum[filename] !== undefined) {
-			if(obj.Id !== 84004 && obj.Id !== 86007)
-				console.log('filename collision: ' + filename + ' disuse: ' + obj.IsDisuse);
+			if(obj.id !== 84004 && obj.id !== 86007)
+				console.log('filename collision: ' + filename + ' disuse: ' + obj.isDisuse);
 			filename+='a';
 		}
 		// if(accum[filename] !== undefined) return accum;
@@ -51,7 +51,7 @@ function collateAchievement(lang) {
 		return accum;
 	}, {});
 
-	const groups = [...new Set(xgoal.map(e => language[e.NameTextMapHash]))];
+	const groups = [...new Set(xgoal.map(e => language[e.nameTextMapHash]))];
 	// for(const g of groups) { showNumber(myachievement, g); };
 	console.log('total: ' + Object.values(myachievement).reduce((accum, ele) => { accum+=ele.stages; return accum }, 0));
 
@@ -71,19 +71,19 @@ function showNumber(myachievement, group) {
 
 function addStage(obj, language) {
 	let out = {};
-	out.title = language[obj.TitleTextMapHash];
-	if(language[obj.Ps5TitleTextMapHash] !== '')
-		out.ps5title = language[obj.Ps5TitleTextMapHash];
-	out.description = sanitizeDescription(language[obj.DescTextMapHash]);
-	out.progress = obj.Progress;
-	const rewards = xreward.find(e => e.RewardId === obj.FinishRewardId).RewardItemList.filter(f => f.ItemId);
-	if(rewards.length === 0) console.log(`achievement ${obj.Id} has no rewards`);
-	if(rewards.length > 1) console.log(`achievement ${obj.Id} has multiple rewards`);
-	if(rewards[0].ItemId !== 201) console.log(`achievement ${obj.Id} has non-primogem reward`);
+	out.title = language[obj.titleTextMapHash];
+	if(language[obj.ps5TitleTextMapHash] !== '')
+		out.ps5title = language[obj.ps5TitleTextMapHash];
+	out.description = sanitizeDescription(language[obj.descTextMapHash]);
+	out.progress = obj.progress;
+	const rewards = xreward.find(e => e.rewardId === obj.finishRewardId).rewardItemList.filter(f => f.itemId);
+	if(rewards.length === 0) console.log(`achievement ${obj.id} has no rewards`);
+	if(rewards.length > 1) console.log(`achievement ${obj.id} has multiple rewards`);
+	if(rewards[0].itemId !== 201) console.log(`achievement ${obj.id} has non-primogem reward`);
 	out.reward = rewards.map(ele => {
 		return {
-			name: language[xmat.find(mat => mat.Id === ele.ItemId).NameTextMapHash], 
-			count: ele.ItemCount
+			name: language[xmat.find(mat => mat.id === ele.itemId).nameTextMapHash], 
+			count: ele.itemCount
 		}; 
 	})[0];
 	return out;
