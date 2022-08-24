@@ -5,9 +5,9 @@ const xavatar = getExcel('AvatarExcelConfigData');
 
 // for AvatarCostumeExcelConfigData
 const propertyMap = {
-	id: 'GMECDCKBFJM', // 200301
-	avatarId: 'FMAJGGBGKKN', // 10000003
-	iconName: 'FOINIGFDKIP' // UI_AvatarIcon_QinCostumeSea
+	id: 'BDFMGMADMGC', // 200301
+	avatarId: 'PDBPABLOMMA', // 10000003
+	iconName: 'MKPEEANCLCO' // UI_AvatarIcon_QinCostumeSea
 }
 
 // taken from collateCharacter.js
@@ -33,7 +33,7 @@ function collateOutfit(lang) {
 
 		if(obj.itemId) {
 			let sauce = xsource.find(ele => ele.id === obj.itemId);
-			data.source = sauce.textList.map(ele => language[ele]).filter(ele => ele !== '');
+			data.source = sauce.textList.map(ele => language[ele]).filter(ele => ele !== '' && ele !== undefined);
 
 			data.namecard = xmat.find(ele => ele.id === obj.itemId).icon;
 		} else {

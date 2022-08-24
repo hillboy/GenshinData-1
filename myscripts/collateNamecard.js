@@ -15,7 +15,7 @@ function collateNamecard(lang) {
 		data.sortorder = obj.id;
 
 		let sauce = xsource.find(ele => ele.id === obj.id);
-		data.source = sauce.textList.map(ele => language[ele]).filter(ele => ele !== '');
+		data.source = sauce.textList.map(ele => language[ele]).filter(ele => ele !== '' && ele !== undefined);
 
 
 		data.nameicon = obj.icon;

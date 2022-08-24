@@ -34,7 +34,7 @@ global.capitalizeFirst = function(str) { return str[0].toUpperCase() + str.toLow
 global.replaceLayout = function(str) { return str.replace(/{LAYOUT_MOBILE#.*?}{LAYOUT_PC#(.*?)}{LAYOUT_PS#.*?}/gi,'$1').replace('#','').replaceAll('{NON_BREAK_SPACE}', ' '); }
 global.replaceNewline = function(str) { return str.replace(/\\n/gi, '\n'); }
 global.sanitizeDescription = function(str) { return replaceNewline(replaceLayout(stripHTML(convertBold(str || '')))); }
-global.getMatSourceText = function(id, textmap) { return getExcel('MaterialSourceDataExcelConfigData').find(e => e.id === id).textList.map(e => textmap[e]).filter(e => e !== ''); }
+global.getMatSourceText = function(id, textmap) { return getExcel('MaterialSourceDataExcelConfigData').find(e => e.id === id).textList.map(e => textmap[e]).filter(e => e !== '' && e !== undefined); }
 /* ======================================================================================= */
 
 // object map that converts the genshin coded element into a TextMapHash
@@ -68,6 +68,20 @@ global.weaponTextMapHash = ['WEAPON_SWORD_ONE_HAND', 'WEAPON_CATALYST', 'WEAPON_
 // translates day of the week. 1 => Monday, etc. Returns textmaphash
 global.dayOfWeek = function(num) {
 	return xmanualtext.find(ele => ele.textMapId === 'UI_ABYSSUS_DATE'+num).textMapContentTextMapHash;
+}
+
+// if it isn't unique, then appends "a" to end. or "b". all the way to "z".
+global.makeUniqueFileName = function(textmaphash, map) {
+	let name = getLanguage('EN')[textmaphash];
+	if(name === "" || name === undefined) return "";
+	let filename = makeFileName(name);
+	if(map[filename] === undefined) return filename;
+
+	let charset = "abcdefghijklmnopqrstuvwxyz";
+	let i = 0;
+	while(map[filename+charset[i]] !== undefined) { i++; }
+	if(i === 26) console.log("cannot make unique filename for " + name);
+	else return filename+charset[i];
 }
 
 const xcity = getExcel('CityConfigData');
@@ -123,7 +137,7 @@ function exportData(folder, collateFunc, englishonly, skipwrite) {
 // exportData('characters', require('./collateCharacter.js'));
 // exportCurve('characters', 'AvatarCurveExcelConfigData');
 // exportData('constellations', require('./collateConstellation'));
-// exportData('talents', require('./collateTalent.js'));
+exportData('talents', require('./collateTalent.js'));
 // exportData('weapons', require('./collateWeapon.js'));
 // exportCurve('weapons', 'WeaponCurveExcelConfigData')
 // exportData('artifacts', require('./collateArtifact.js'));

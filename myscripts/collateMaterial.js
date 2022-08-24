@@ -106,12 +106,12 @@ function collateMaterial(lang) {
 			}, []);
 		}
 		const sourcelist = tmp.textList.concat(tmp.jumpList);
-		data.source = sourcelist.map(ele => language[ele]).filter(ele => ele !== ''); // TextList/JumpList
+		data.source = sourcelist.map(ele => language[ele]).filter(ele => ele !== '' && ele !== undefined); // TextList/JumpList
 
 		data.imagename = obj.icon;
 		if(!data.imagename) console.log(data.name+' has no icon');
 
-		let filename = makeFileName(getLanguage('EN')[obj.nameTextMapHash]);
+		let filename = makeUniqueFileName(obj.nameTextMapHash, accum);
 		if(filename === '') return accum;
 		if(filename.includes('shrineofdepthskey')) return accum;
 		accum[filename] = data;

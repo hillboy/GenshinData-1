@@ -5,7 +5,7 @@ const xdescribe = getExcel('AnimalDescribeExcelConfigData');
 const xcapture = getExcel('CaptureExcelConfigData');
 
 // FIX THIS EVERY VERSION
-const propCOUNTTYPE = "OCCLHPBCDGL";
+const propCOUNTTYPE = "FEBIEOGMDMF"; // AnimalCodexExcelConfigData
 
 function collateAnimal(lang) {
 	const language = getLanguage(lang);

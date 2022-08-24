@@ -20,7 +20,8 @@ function collateWeapon(lang) {
 
 		let data = {};
 		data.id = obj.id;
-		let filename = makeFileName(getLanguage('EN')[obj.nameTextMapHash]);
+		let filename = makeUniqueFileName(obj.nameTextMapHash, accum);
+		if(filename === "") return accum;
 		if(accum[filename] !== undefined) console.log(filename+' IS NOT UNIQUE');
 
 		data.name = language[obj.nameTextMapHash];

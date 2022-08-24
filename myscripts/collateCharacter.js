@@ -53,7 +53,7 @@ function collateCharacter(lang) {
 		data.element = language[extra.avatarVisionBeforTextMapHash];
 		data.constellation = language[extra.avatarConstellationBeforTextMapHash];
 		if(obj.id === 10000030) data.constellation = language[extra.avatarConstellationAfterTextMapHash]; // Zhongli exception
-		data.title = language[extra.avatarTitleTextMapHash];
+		data.title = language[extra.avatarTitleTextMapHash] || "";
 		data.association = extra.avatarAssocType.slice(extra.avatarAssocType.indexOf('TYPE_')+5);
 		if(associationToCityId[data.association] === undefined)
 			console.log(`character missing cityId for association ${data.association}`);

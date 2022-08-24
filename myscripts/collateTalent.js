@@ -49,7 +49,7 @@ function collateTalent(lang) {
 				// build the labels
 				let attTalent = xpassive.find(tal => (tal.proudSkillGroupId === talent.proudSkillGroupId && tal.level === 1));
 				for(let labelTextMap of attTalent.paramDescList) {
-					if(language[labelTextMap] === "") continue;
+					if(language[labelTextMap] === "" || language[labelTextMap] === undefined) continue;
 					ref.labels.push(replaceLayout(language[labelTextMap]));
 				}
 

@@ -129,7 +129,7 @@ function collateDomain(lang) {
 			}
 		});
 		// if(obj.disorderoverride) data.disorder = obj.disorderoverride.map(d => language[d]); // fix not needed anymore
-		data.disorder = xdisorder.filter(d => d.id+'' === Object.keys(obj.levelConfigMap)[0]).map(d => language[d.descTextMapHash]);
+		data.disorder = xdisorder.filter(d => d.id+'' === Object.keys(obj.levelConfigMap)[0]).map(d => language[d.descTextMapHash]).filter(ele => ele !== '' && ele !== undefined);
 		data.imagename = obj.entryPicPath;
 
 		let filename = makeFileName(getLanguage('EN')[obj.nameTextMapHash]);
