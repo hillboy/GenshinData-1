@@ -137,26 +137,27 @@ function exportData(folder, collateFunc, englishonly, skipwrite) {
 // exportData('characters', require('./collateCharacter.js'));
 // exportCurve('characters', 'AvatarCurveExcelConfigData');
 // exportData('constellations', require('./collateConstellation'));
-exportData('talents', require('./collateTalent.js'));
+// exportData('talents', require('./collateTalent.js'));
 // exportData('weapons', require('./collateWeapon.js'));
 // exportCurve('weapons', 'WeaponCurveExcelConfigData')
 // exportData('artifacts', require('./collateArtifact.js'));
 // exportData('foods', require('./collateFood'));
-// exportData('materials', require('./collateMaterial')); // change: used both TextList/JumpList. temp removed dropdomain/daysofweek
-// exportData('domains', require('./collateDomain')); // run twice // remember to add back recommendedelements and disorder and entrypicpath
+// exportData('materials', require('./collateMaterial')); // change: used both TextList/JumpList.
+// exportData('domains', require('./collateDomain')); // run twice
 // exportData('enemies', require('./collateEnemy'));
 // exportCurve('enemies', 'MonsterCurveExcelConfigData');
 
 // exportData('domains', require('./collateDomainMonsterList')); // MUST do run only after both domains and enemies have run. sync.
 
-// exportData('outfits', require('./collateOutfit')); // Fix obfuscated keys after every version update
+// exportData('outfits', require('./collateOutfit'));
 // exportData('windgliders', require('./collateWindGlider'));
-// exportData('animals', require('./collateAnimal')); // Fix obfuscated keys after every version update
+// exportData('animals', require('./collateAnimal'));
 // exportData('namecards', require('./collateNamecard'));
 // exportData('geographies', require('./collateGeography'));
 // exportData('achievements', require('./collateAchievement'));
 // exportData('achievementgroups', require('./collateAchievementGroup'));
 // exportData('adventureranks', require('./collateAdventureRank'));
+exportData('crafts', require('./collateCraft'));
 
 // exportData('commissions', require('./collateCommission'), true); // unfinished
 // exportData('voiceovers', require('./collateVoiceover'), true); // unfinished

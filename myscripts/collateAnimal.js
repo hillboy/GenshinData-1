@@ -5,7 +5,12 @@ const xdescribe = getExcel('AnimalDescribeExcelConfigData');
 const xcapture = getExcel('CaptureExcelConfigData');
 
 // FIX THIS EVERY VERSION
-const propCOUNTTYPE = "FEBIEOGMDMF"; // AnimalCodexExcelConfigData
+let propCOUNTTYPE = "FEBIEOGMDMF"; // AnimalCodexExcelConfigData
+
+// find property names
+for([key, value] of Object.entries(xcodex[0])) {
+	if(value === "CODEX_COUNT_TYPE_KILL") propCOUNTTYPE = key;
+}
 
 function collateAnimal(lang) {
 	const language = getLanguage(lang);

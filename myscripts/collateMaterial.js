@@ -86,8 +86,8 @@ function collateMaterial(lang) {
 		if(dungeonlist > 0) {
 			if(dungeonlist.length > 1) console.log(`${data.name} drops from more than one dungeon!`);
 			if(xdungeon.find(ele => ele.id === dungeonlist[0])) {
-				// data.dropdomain = language[xdungeon.find(ele => ele.id === dungeonlist[0]).displayNameTextMapHash]; // artifact domains don't have DisplayNameTextMapHash
-				// data.daysofweek = getDayWeekList(dungeonlist[0], language); 
+				data.dropdomain = language[xdungeon.find(ele => ele.id === dungeonlist[0]).displayNameTextMapHash]; // artifact domains don't have DisplayNameTextMapHash
+				data.daysofweek = getDayWeekList(dungeonlist[0], language); 
 			}
 		}
 		// get fishing locations
@@ -131,7 +131,7 @@ function getDayWeekList(dungeonId, langmap) {
 	let mylist = [];
 	for(const ele of xdailyd)
 		for(const [key, value] of Object.entries(mapENtoNum))
-			if(ele[key].includes(dungeonId)) mylist.push(value);
+			if(ele[key.toLowerCase()].includes(dungeonId)) mylist.push(value);
 	mylist = mylist.sort((a, b) => a - b);
 	return mylist.map(ele => langmap[dayOfWeek(ele)]);
 }

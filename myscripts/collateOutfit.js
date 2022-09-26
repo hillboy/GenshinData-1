@@ -10,6 +10,13 @@ const propertyMap = {
 	iconName: 'MKPEEANCLCO' // UI_AvatarIcon_QinCostumeSea
 }
 
+// find property names
+for([key, value] of Object.entries(xcostume[0])) {
+	if(value === 200301) propertyMap.id = key;
+	else if(value === 10000003) propertyMap.avatarId = key;
+	else if(value === "UI_AvatarIcon_QinCostumeSea") propertyMap.iconName = key;
+}
+
 // taken from collateCharacter.js
 const playerIdToTextMapHash = { 10000005: 2329553598, 10000007: 3241049361 };
 

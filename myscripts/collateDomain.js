@@ -32,6 +32,9 @@ function getDomainTypeTextMapHash(domaintype) {
 "UI_DUNGEON_ENTRY_368", // "Court of Flowing Sand"
 "UI_DUNGEON_ENTRY_433", // "Slumbering Court"
 "UI_DUNGEON_ENTRY_516", // "The Lost Valley"
+"UI_DUNGEON_ENTRY_505", // "Steeple of Ignorance"
+"UI_DUNGEON_ENTRY_507", // "Spire of Solitary Enlightenment"
+"UI_DUNGEON_ENTRY_509", // "Tower of Abject Pride"
 */
 function getDomainEntranceTextMapHash(englishname) {
 	englishname = englishname.toLowerCase();
@@ -69,6 +72,12 @@ function getDomainEntranceTextMapHash(englishname) {
 		return mapping("UI_DUNGEON_ENTRY_433");
 	else if(englishname.includes('machine nest'))
 		return mapping("UI_DUNGEON_ENTRY_516");
+	else if(englishname.includes('seven sense'))
+		return mapping("UI_DUNGEON_ENTRY_507");
+	else if(englishname.includes('full moon') || englishname.includes('witticism') || englishname.includes('basket of'))
+		return mapping("UI_DUNGEON_ENTRY_505");
+	else if(englishname.includes('tainted cloud') || englishname.includes('leading karma') || englishname.includes('obsession'))
+		return mapping("UI_DUNGEON_ENTRY_509");
 	else
 		console.log('no domain entrance mapping found for '+englishname);
 }

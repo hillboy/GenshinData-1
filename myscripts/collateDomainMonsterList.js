@@ -58,6 +58,11 @@ const monsterMap = {
 	"bless machine nest iii": ['ru scout', 'ru cruiser', 'ru destroy'],
 	"bless machine nest iv": ['ru grader', 'ru cruiser', 'ru destroy'],
 
+	"bless seven sense i": ['ere sunfrost', 'ere cross', 'ere sword', 'ere halberd'],
+	"bless seven sense ii": ['ere daythun', 'ere clear', 'ere cross', 'ere sword', 'ere vanguard'],
+	"bless seven sense iii": ['ere daythun', 'ere clear', 'ere sunfrost', 'ere cross', 'ere lineb', 'ere halberd'],
+	"bless seven sense iv": ['ere daythun', 'ere clear', 'ere sunfrost'],
+
 	"forge alt sand i": ['hy slime', 'la hy slime', 'py slime', 'la py slime'],
 	"forge alt sand ii": ['la hy slime', 'la py slime'],
 	"forge alt sand iii": ['la hy slime', 'la py slime', 'hy ab mage', 'py ab mage'],
@@ -103,6 +108,21 @@ const monsterMap = {
 	"forge trial thunder iii": ['la el slime', 'mu el slime', 'fa el ci mage'],
 	"forge trial thunder iv": ['la el slime', 'mu el slime', 'fa el ci mage'],
 
+	"forge tainted clouds i": ['pyro fungus', 'dendro fungus', 'hydro fungus', 'electro fungus'],
+	"forge tainted clouds ii": ['cryo fungus', 'pyro fungus', 'geo fungus', 'dendro fungus', 'electro fungus'],
+	"forge tainted clouds iii": ['pyro fungus', 'cryo fungus', 'geo fungus', 'electro fungus', 'dendro fungus', 'hydroshroom', 'dendroshroom'],
+	"forge tainted clouds iv": ['hydro fungus', 'dendro fungus', 'hydroshroom', 'dendroshroom'],
+
+	"forge obsession i": ['pyro fungus', 'dendro fungus', 'hydro fungus', 'electro fungus'],
+	"forge obsession ii": ['cryo fungus', 'pyro fungus', 'geo fungus', 'dendro fungus', 'electro fungus'],
+	"forge obsession iii": ['pyro fungus', 'cryo fungus', 'geo fungus', 'electro fungus', 'dendro fungus', 'hydroshroom', 'dendroshroom'],
+	"forge obsession iv": ['hydro fungus', 'dendro fungus', 'hydroshroom', 'dendroshroom'],
+
+	"forge lead karma i": ['pyro fungus', 'dendro fungus', 'hydro fungus', 'electro fungus'],
+	"forge lead karma ii": ['cryo fungus', 'pyro fungus', 'geo fungus', 'dendro fungus', 'electro fungus'],
+	"forge lead karma iii": ['pyro fungus', 'cryo fungus', 'geo fungus', 'electro fungus', 'dendro fungus', 'hydroshroom', 'dendroshroom'],
+	"forge lead karma iv": ['hydro fungus', 'dendro fungus', 'hydroshroom', 'dendroshroom'],
+
 	"maste alt flame i": ['py slime', 'la py slime', 'py ab mage'],
 	"maste alt flame ii": ['py slime', 'la py slime', 'py ab mage'],
 	"maste alt flame iii": ['la py slime', 'py ab mage'],
@@ -147,6 +167,21 @@ const monsterMap = {
 	"maste vine ruin ii": ['nobu jintou', 'nobu hitsuke', 'nobu kikou', 'th pyro pot', 'th elec pot'],
 	"maste vine ruin iii": ['nobu hitsuke', 'nobu kikou', 'th pyro pot', 'th el pot', 'kairagi fiery'],
 	"maste vine ruin iv": ['th cryo pot', 'kairagi thunder', 'kairagi fiery'],
+
+	"maste full moon i": ['ruin guard', 'ruin earthguard'],
+	"maste full moon ii": ['ruin earthguard', 'ruin destroy', 'ruin scout'],
+	"maste full moon iii": ['ruin earthguard', 'ruin skywatch'],
+	"maste full moon iv": ['ruin earthguard', 'ruin skywatch'],
+
+	"maste witticism i": ['ruin guard', 'ruin earthguard'],
+	"maste witticism ii": ['ruin earthguard', 'ruin destroy', 'ruin scout'],
+	"maste witticism iii": ['ruin earthguard', 'ruin skywatch'],
+	"maste witticism iv": ['ruin earthguard', 'ruin skywatch'],
+
+	"maste basket of i": ['ruin guard', 'ruin earthguard'],
+	"maste basket of ii": ['ruin earthguard', 'ruin destroy', 'ruin scout'],
+	"maste basket of iii": ['ruin earthguard', 'ruin skywatch'],
+	"maste basket of iv": ['ruin earthguard', 'ruin skywatch'],
 }
 
 function autocomplete(input, dict) {

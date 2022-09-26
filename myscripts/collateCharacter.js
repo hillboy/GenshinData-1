@@ -14,6 +14,7 @@ const associationToCityId = {
 	'INAZUMA': 3,
 	'MAINACTOR': '',
 	'RANGER': '',
+	'SUMERU': 4,
 }
 
 function collateCharacter(lang) {
