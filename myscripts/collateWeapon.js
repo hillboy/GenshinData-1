@@ -15,16 +15,18 @@ const xplayableWeapon = xweapon.filter(obj => {
 
 function collateWeapon(lang) {
 	const language = getLanguage(lang);
+	const dupeCheck = {};
 	const xsubstat = getExcel('WeaponPromoteExcelConfigData');
 	let myweapon = xplayableWeapon.reduce((accum, obj) => {
 
 		let data = {};
 		data.id = obj.id;
-		let filename = makeUniqueFileName(obj.nameTextMapHash, accum);
+		let filename = makeUniqueFileName(obj.nameTextMapHash, accum, data);
 		if(filename === "") return accum;
 		if(accum[filename] !== undefined) console.log(filename+' IS NOT UNIQUE');
 
 		data.name = language[obj.nameTextMapHash];
+		checkDupeName(data, dupeCheck);
 		data.description = sanitizeDescription(language[obj.descTextMapHash]);
 		data.weapontype = language[weaponTextMapHash[obj.weaponType]];
 		data.rarity = ''+obj.rankLevel;

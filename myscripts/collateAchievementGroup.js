@@ -4,6 +4,7 @@ const xmat = getExcel('MaterialExcelConfigData');
 
 function collateAchievementGroup(lang) {
 	const language = getLanguage(lang);
+	const dupeCheck = {};
 	let myachievementgroup = xgroup.reduce((accum, obj) => {
 		let data = {};
 		data.id = obj.id;
@@ -25,9 +26,9 @@ function collateAchievementGroup(lang) {
 		data.nameicon = obj.iconPath;
 
 
-		let filename = makeFileName(getLanguage('EN')[obj.nameTextMapHash]);
+		let filename = makeUniqueFileName(obj.nameTextMapHash, accum);
 		if(filename === '') return accum;
-		if(accum[filename] !== undefined) console.log('filename collision: ' + filename);
+		checkDupeName(data, dupeCheck);
 		accum[filename] = data;
 		return accum;
 	}, {});

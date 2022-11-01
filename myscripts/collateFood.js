@@ -20,6 +20,7 @@ const mapQualityToProp = {
 
 function collateFood(lang) {
 	const language = getLanguage(lang);
+	const dupeCheck = {};
 
 	let myfood = xrecipe.reduce((accum, obj) => {
 		//if(obj.id !== 1003) return accum;
@@ -61,7 +62,11 @@ function collateFood(lang) {
 		// data.source = 
 		data.imagename = obj.icon;
 
-		accum[makeFileName(getLanguage('EN')[obj.nameTextMapHash])] = data;
+
+		let filename = makeFileName(getLanguage('EN')[obj.nameTextMapHash]);
+		if(accum[filename] !== undefined) console.log('filename collision: ' + filename);
+		checkDupeName(data, dupeCheck)
+		accum[filename] = data;
 
 		// check if there is a specialty
 		let myspec = getSpecialty(obj.id);
@@ -90,7 +95,11 @@ function collateFood(lang) {
 		spdata.ingredients = ingredients;
 		spdata.imagename = xd.icon;
 
-		accum[makeFileName(getLanguage('EN')[xd.nameTextMapHash])] = spdata;
+		filename = makeFileName(getLanguage('EN')[xd.nameTextMapHash]);
+		if(accum[filename] !== undefined) console.log('filename collision: ' + filename);
+		checkDupeName(spdata, dupeCheck);
+		accum[filename] = spdata;
+
 		return accum;
 	}, {});
 	// console.log(myfood);

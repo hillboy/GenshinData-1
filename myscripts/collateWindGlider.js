@@ -4,6 +4,7 @@ const xfly = getExcel('AvatarFlycloakExcelConfigData');
 
 function collateWindGlider(lang) {
 	const language = getLanguage(lang);
+	const dupeCheck = {};
 	let mydata = xfly.reduce((accum, obj) => {
 		let data = {};
 		data.id = obj.flycloakId;
@@ -28,6 +29,7 @@ function collateWindGlider(lang) {
 		let filename = makeFileName(getLanguage('EN')[obj.nameTextMapHash]);
 		if(filename === '') return accum;
 		if(accum[filename] !== undefined) console.log('filename collision: ' + filename);
+		checkDupeName(data, dupeCheck);
 		accum[filename] = data;
 		return accum;
 	}, {});

@@ -27,6 +27,7 @@ if(out === null) console.log('enemy null resistance rounding');
 function collateEnemy(lang) {
 	const language = getLanguage(lang);
 	const xmat = getExcel('MaterialExcelConfigData');
+	const dupeCheck = {};
 
 	let mymonster = xcodex.reduce((accum, obj) => {
 		if(obj.type !== 'CODEX_MONSTER') return accum;
@@ -64,9 +65,6 @@ function collateEnemy(lang) {
 				// Abyss Lector: Violet Lightning, Abyss Herald: Wicked Torrents, Abyss Lector: Fathomless Flames
 				// Hydro Cicin, Electro Cicin, Cryo Cicin
 				data.rewardpreview = [];
-			} else if(obj.Id === 26090101) { // Floating Hydro Fungus
-				let rewardpreview = xpreview.find(pre => pre.id === 16012).previewItems.filter(pre => pre.id);
-				data.rewardpreview = mapRewardList(rewardpreview, language);
 			} else if(obj.Id === 29010104) { // dvalin lvl90
 				let rewardpreview = xpreview.find(pre => pre.id === 15005).previewItems.filter(pre => pre.id);
 				data.rewardpreview = mapRewardList(rewardpreview, language);
@@ -145,6 +143,7 @@ function collateEnemy(lang) {
 
 		let filename = makeFileName(getLanguage('EN')[des.nameTextMapHash]);
 		if(filename === '') return accum;
+		checkDupeName(data, dupeCheck);
 
 		accum[filename] = data;
 		return accum;
@@ -169,7 +168,14 @@ const noRewardListMonsterMap = {
 	25030101: 25010201, // Treasure Hoarders: Carmen
 	25040101: 25010201, // Treasure Hoarders: Boss
 	25050101: 25010201, // Millelith Soldier
-	25050201: 25010201 // Millelith Sergeant
+	25050201: 25010201, // Millelith Sergeant
+	25410201: 25210301, // Eremite Galehunter
+	25410101: 25210301, // Eremite Stone Enchanter
+	26090101: 26090201, // Floating Hydro Fungus
+	26090301: 26090201, // Floating Anemo Fungus
+	26090601: 26090401, // Whirling Pyro Fungus
+	26091001: 26090901, // Stretch Electro Fungus
+	26120401: 26120301 // Grounded Geoshroom
 }
 
 // makes sure each monster has a corresponding "investigation" data

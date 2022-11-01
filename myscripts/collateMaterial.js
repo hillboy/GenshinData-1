@@ -57,6 +57,7 @@ function collateMaterial(lang) {
 	const xpool = getExcel('FishPoolExcelConfigData');
 
 	let sortOrder = 0;
+	const dupeCheck = {};
 
 	let mymaterial = xmat.reduce((accum, obj) => {
 		sortOrder++;
@@ -111,9 +112,10 @@ function collateMaterial(lang) {
 		data.imagename = obj.icon;
 		if(!data.imagename) console.log(data.name+' has no icon');
 
-		let filename = makeUniqueFileName(obj.nameTextMapHash, accum);
+		let filename = makeUniqueFileName(obj.nameTextMapHash, accum, data);
 		if(filename === '') return accum;
 		if(filename.includes('shrineofdepthskey')) return accum;
+		checkDupeName(data, dupeCheck);
 		accum[filename] = data;
 		return accum;
 	}, {});

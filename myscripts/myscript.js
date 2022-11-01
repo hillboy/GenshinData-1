@@ -27,7 +27,7 @@ global.isPlayer = function(data) { return data.candSkillDepotIds && data.candSki
 global.getPlayerElement = function(SkillDepotId) { let tmp = xskilldepot.find(ele => ele.id === SkillDepotId); return tmp === undefined ? tmp : tmp.talentStarName.split('_').pop(); }
 global.getLanguage = function(abbriev) { return getTextMap(abbriev.toUpperCase()); }
 global.normalizeStr = function(str) { return str.normalize('NFD').replace(/[\u0300-\u036f]/g, ''); }
-global.makeFileName = function(str, lang) { return normalizeStr(str).toLowerCase().replace(/[^a-z]/g,''); }
+global.makeFileName = function(str, lang) { return normalizeStr(str).toLowerCase().replace(/[^a-z0-9]/g,''); }
 global.convertBold = function(str) { return str.replace(/<color=#FFD780FF>(.*?)<\/color>/gi, '**$1**'); }
 global.stripHTML = function(str) { return (str || '').replace(/(<([^>]+)>)/gi, ''); }
 global.capitalizeFirst = function(str) { return str[0].toUpperCase() + str.toLowerCase().slice(1); }
@@ -70,6 +70,7 @@ global.dayOfWeek = function(num) {
 	return xmanualtext.find(ele => ele.textMapId === 'UI_ABYSSUS_DATE'+num).textMapContentTextMapHash;
 }
 
+const uniqueLog = {};
 // if it isn't unique, then appends "a" to end. or "b". all the way to "z".
 global.makeUniqueFileName = function(textmaphash, map) {
 	let name = getLanguage('EN')[textmaphash];
@@ -77,11 +78,34 @@ global.makeUniqueFileName = function(textmaphash, map) {
 	let filename = makeFileName(name);
 	if(map[filename] === undefined) return filename;
 
-	let charset = "abcdefghijklmnopqrstuvwxyz";
-	let i = 0;
-	while(map[filename+charset[i]] !== undefined) { i++; }
-	if(i === 26) console.log("cannot make unique filename for " + name);
-	else return filename+charset[i];
+	let i = 1;
+	while(map[filename+"-"+("0" + i).slice(-2)] !== undefined) { i++; }
+	if(i > 99) console.log("cannot make unique filename for " + name);
+	else {
+		// if (!uniqueLog[name + ' ' + i])
+		// 	console.log('  dupe made: '+name + ' ' + i)
+		return filename+"-"+("0" + i).slice(-2);
+	}
+}
+
+const dupelogskip = [118002, 11419, 100934, 28030501, 80032, 82010];
+global.checkDupeName = function(data, namemap) {
+	let name = data.name;
+	let key = name.toLowerCase().replace(/[ ["'·\.「」…！\!？\?(\)。，,《》—『』«»<>\]#{\}]/g, '');
+	let id;
+	if (namemap[key]) {
+		namemap[key].dupealias = namemap[key].name + ' 0';
+		id = namemap[key].id || namemap[key].id[0] || -1;
+	} else {
+		namemap[key] = data;
+		return false;
+	}
+	let i = 1;
+	while (namemap[key+i]) { i++; }
+	data.dupealias = name+' '+i;
+	if(!dupelogskip.includes(id)) console.log(" dupealias added " + id + ": "+data.dupealias);
+	namemap[key+i] = data;
+	return true;
 }
 
 const xcity = getExcel('CityConfigData');
@@ -155,9 +179,9 @@ function exportData(folder, collateFunc, englishonly, skipwrite) {
 // exportData('namecards', require('./collateNamecard'));
 // exportData('geographies', require('./collateGeography'));
 // exportData('achievements', require('./collateAchievement'));
-// exportData('achievementgroups', require('./collateAchievementGroup'));
-// exportData('adventureranks', require('./collateAdventureRank'));
-exportData('crafts', require('./collateCraft'));
+exportData('achievementgroups', require('./collateAchievementGroup'));
+exportData('adventureranks', require('./collateAdventureRank'));
+// exportData('crafts', require('./collateCraft'));
 
 // exportData('commissions', require('./collateCommission'), true); // unfinished
 // exportData('voiceovers', require('./collateVoiceover'), true); // unfinished

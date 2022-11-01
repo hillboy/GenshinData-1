@@ -14,6 +14,7 @@ for([key, value] of Object.entries(xcodex[0])) {
 
 function collateAnimal(lang) {
 	const language = getLanguage(lang);
+	const dupeCheck = {};
 	let mydata = xcodex.reduce((accum, obj) => {
 		if(obj.type === 'CODEX_MONSTER') return accum;
 		if(obj.isDisuse) return accum;
@@ -33,9 +34,9 @@ function collateAnimal(lang) {
 		data.nameicon = mydescribe.icon;
 
 
-		let filename = makeFileName(getLanguage('EN')[mydescribe.nameTextMapHash]);
+		let filename = makeUniqueFileName(mydescribe.nameTextMapHash, accum);
 		if(filename === '') return accum;
-		if(accum[filename] !== undefined) console.log('filename collision: ' + filename);
+		checkDupeName(data, dupeCheck);
 		accum[filename] = data;
 		return accum;
 	}, {});

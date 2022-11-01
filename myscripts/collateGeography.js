@@ -5,6 +5,7 @@ const xarea = getExcel('WorldAreaConfigData');
 
 function collageGeography(lang) {
 	const language = getLanguage(lang);
+	const dupeCheck = {};
 	let mygeography = xview.reduce((accum, obj) => {
 
 		let data = {};
@@ -24,6 +25,7 @@ function collageGeography(lang) {
 		let filename = makeFileName(getLanguage('EN')[obj.nameTextMapHash]);
 		if(filename === '') return accum;
 		if(accum[filename] !== undefined) console.log('filename collision: ' + filename);
+		checkDupeName(data, dupeCheck);
 		accum[filename] = data;
 		return accum;
 	}, {});

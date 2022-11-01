@@ -3,7 +3,9 @@ const xgoal = getExcel('AchievementGoalExcelConfigData');
 const xreward = getExcel('RewardExcelConfigData');
 const xmat = getExcel('MaterialExcelConfigData');
 
+
 function collateAchievement(lang) {
+	const dupeCheck = {};
 	const language = getLanguage(lang);
 	let myachievement = xachieve.reduce((accum, obj) => {
 		if(obj.isDisuse === true) {
@@ -39,14 +41,9 @@ function collateAchievement(lang) {
 		data['stage'+data.stages] = addStage(obj, language);
 
 
-		let filename = makeFileName(getLanguage('EN')[obj.titleTextMapHash]);
+		let filename = makeUniqueFileName(obj.titleTextMapHash, accum, data);
 		if(filename === '') return accum;
-		if(accum[filename] !== undefined) {
-			if(obj.id !== 84004 && obj.id !== 86007)
-				console.log('filename collision: ' + filename + ' disuse: ' + obj.isDisuse);
-			filename+='a';
-		}
-		// if(accum[filename] !== undefined) return accum;
+		checkDupeName(data, dupeCheck);
 		accum[filename] = data;
 		return accum;
 	}, {});
