@@ -121,7 +121,7 @@ if(!xcity.find(ele => getLanguage('EN')[ele.cityNameTextMapHash] === 'Snezhnaya'
 	getLanguage('JP')['Snezhnaya'] = 'スネージナヤ';
 	getLanguage('KR')['Snezhnaya'] = '스네즈나야';
 	getLanguage('PT')['Snezhnaya'] = 'Snezhnaya';
-	getLanguage('RU')['Snezhnaya'] = 'Снежной';
+	getLanguage('RU')['Snezhnaya'] = 'Снежная';
 	getLanguage('TH')['Snezhnaya'] = 'Snezhnaya';
 	getLanguage('VI')['Snezhnaya'] = 'Snezhnaya';
 
