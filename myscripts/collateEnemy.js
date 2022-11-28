@@ -86,6 +86,9 @@ function collateEnemy(lang) {
 			} else if(obj.Id === 29060201) { // raiden shogun lvl90
 				let rewardpreview = xpreview.find(pre => pre.id === 15038).previewItems.filter(pre => pre.id);
 				data.rewardpreview = mapRewardList(rewardpreview, language);
+			} else if(obj.Id === 29070101) { // scaramouche lvl90
+				let rewardpreview = xpreview.find(pre => pre.id === 15042).previewItems.filter(pre => pre.id);
+				data.rewardpreview = mapRewardList(rewardpreview, language);				
 			}
 		}
 		if(!data.rewardpreview) {
@@ -100,7 +103,7 @@ function collateEnemy(lang) {
 		sub = xmanualtext.find(m => m.textMapId === `UI_CODEX_ANIMAL_CATEGORY_${sub}`).textMapContentTextMapHash;
 		data.enemytype = mon.securityLevel || 'COMMON';
 		data.category = language[sub];
-		data.imageicon = des.icon;
+		data.nameicon = des.icon;
 		data.description = sanitizeDescription(language[obj.descTextMapHash]);
 
 		data.aggrorange = mon.visionLevel;

@@ -167,7 +167,7 @@ function exportData(folder, collateFunc, englishonly, skipwrite) {
 // exportData('artifacts', require('./collateArtifact.js'));
 // exportData('foods', require('./collateFood'));
 // exportData('materials', require('./collateMaterial')); // change: used both TextList/JumpList.
-// exportData('domains', require('./collateDomain')); // run twice
+exportData('domains', require('./collateDomain')); // run twice
 // exportData('enemies', require('./collateEnemy'));
 // exportCurve('enemies', 'MonsterCurveExcelConfigData');
 
@@ -179,8 +179,8 @@ function exportData(folder, collateFunc, englishonly, skipwrite) {
 // exportData('namecards', require('./collateNamecard'));
 // exportData('geographies', require('./collateGeography'));
 // exportData('achievements', require('./collateAchievement'));
-exportData('achievementgroups', require('./collateAchievementGroup'));
-exportData('adventureranks', require('./collateAdventureRank'));
+// exportData('achievementgroups', require('./collateAchievementGroup'));
+// exportData('adventureranks', require('./collateAdventureRank'));
 // exportData('crafts', require('./collateCraft'));
 
 // exportData('commissions', require('./collateCommission'), true); // unfinished

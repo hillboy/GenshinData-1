@@ -29,7 +29,7 @@ function collateFood(lang) {
 
 		data.name = language[obj.nameTextMapHash];
 		data.id = obj.id;
-		data.rarity = obj.rankLevel;
+		data.rarity = obj.rankLevel+'';
 		data.foodtype = 'NORMAL';
 		data.foodfilter = language[getManualTextMapHash(obj.foodType)];
 		data.foodcategory = undefined;
@@ -60,7 +60,7 @@ function collateFood(lang) {
 			return accum;
 		}, []);
 		// data.source = 
-		data.imagename = obj.icon;
+		data.nameicon = obj.icon;
 
 
 		let filename = makeFileName(getLanguage('EN')[obj.nameTextMapHash]);
@@ -93,7 +93,7 @@ function collateFood(lang) {
 		spdata.character = language[getAvatar(myspec.avatarId).nameTextMapHash];
 		
 		spdata.ingredients = ingredients;
-		spdata.imagename = xd.icon;
+		spdata.nameicon = xd.icon;
 
 		filename = makeFileName(getLanguage('EN')[xd.nameTextMapHash]);
 		if(accum[filename] !== undefined) console.log('filename collision: ' + filename);

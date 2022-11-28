@@ -109,6 +109,10 @@ function collateDomain(lang) {
 		// if(obj.id >= 5258 && obj.id <= 5265) obj.cityID = 2; // Taishan Mansion in Liyue
 		// if(obj.id >= 5214 && obj.id <= 5225) obj.cityID = 2; // Hidden Palace of Lianshan Formula in Liyue
 		// if(obj.id >= 5200 && obj.id <= 5207) obj.cityID = 3; // Slumbering Court in Inazuma, and Momiji-Dyed Court
+		if(obj.id >= 4310 && obj.id <= 4313) obj.cityID = 1; // "Cecilia Garden"
+		if(obj.id >= 4330 && obj.id <= 4333) obj.cityID = 1; // "Cecilia Garden"
+		if(obj.id >= 4320 && obj.id <= 4323) obj.cityID = 1; // "Cecilia Garden"
+
 
 		data.region = language[xcity.find(city => city.cityId === obj.cityID).cityNameTextMapHash];
 
