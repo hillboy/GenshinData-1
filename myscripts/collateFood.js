@@ -79,7 +79,7 @@ function collateFood(lang) {
 
 		let spdata = {};
 		spdata.name = language[xd.nameTextMapHash];
-		spdata.rarity = xd.rankLevel;
+		spdata.rarity = xd.rankLevel+'';
 		spdata.foodtype = 'SPECIALTY';
 		spdata.foodfilter = foodfilter;
 		spdata.foodcategory = xd.effectIcon.substring(13);
