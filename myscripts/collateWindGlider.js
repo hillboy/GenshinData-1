@@ -12,6 +12,8 @@ function collateWindGlider(lang) {
 		data.name = language[obj.nameTextMapHash];
 		data.description = sanitizeDescription(language[obj.descTextMapHash]);
 
+		data.story = getReadable(`Wings${obj.flycloakId}${(lang != 'CHS') ? ('_' + lang) : ''}`, lang);
+
 		let flymat = xmat.find(ele => ele.id === obj.materialId) || {};
 
 		data.rarity = flymat.rankLevel+"";

@@ -1,6 +1,9 @@
 // object map that converts relic EquipType to a property name
 const relicTypeToPropertyName = { 'EQUIP_BRACER': 'flower', 'EQUIP_NECKLACE': 'plume', 'EQUIP_SHOES': 'sands', 'EQUIP_RING': 'goblet', 'EQUIP_DRESS': 'circlet'};
 
+// convert artifact type to index in readables
+const relicTypeToIndex = {'EQUIP_BRACER': '4', 'EQUIP_NECKLACE': '2', 'EQUIP_SHOES': '5', 'EQUIP_RING': '1', 'EQUIP_DRESS': '3'}
+
 function collateArtifact(lang) {
 	const language = getLanguage(lang);
 	const xsets = getExcel('ReliquarySetExcelConfigData');
@@ -38,6 +41,7 @@ function collateArtifact(lang) {
 		}
 
 		data.images = {};
+
 		// relic pieces
 		obj.containsList.forEach(ele => {
 			let relic = xrelics.find(e => e.id === ele);
@@ -46,10 +50,13 @@ function collateArtifact(lang) {
 			relicdata.relictype = xmanualtext.find(ele => ele.textMapId === relic.equipType).textMapContentTextMapHash;
 			relicdata.relictype = language[relicdata.relictype];
 			relicdata.description = language[relic.descTextMapHash];
+			relicdata.story = getReadable(`Relic${obj.setId}_${relicTypeToIndex[relic.equipType]}${(lang != 'CHS') ? ('_' + lang) : ''}`, lang);
 			data[relicTypeToPropertyName[relic.equipType]] = relicdata;
 			data.images['name'+relicTypeToPropertyName[relic.equipType]] = relic.icon;
 			data.images[relicTypeToPropertyName[relic.equipType]] = `https://upload-os-bbs.mihoyo.com/game_record/genshin/equip/${relic.icon}.png`;
 		});
+
+		
 
 		data.name = setname;
 		accum[filename] = data;

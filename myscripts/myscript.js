@@ -1,7 +1,19 @@
 const fs = require('fs');
 
+
+
 global.getExcel = function(file) { return require(`../ExcelBinOutput/${file}.json`); }
 global.getTextMap = function(langcode) { return require(`../TextMap/TextMap${langcode}.json`); }
+
+global.getReadable = function(name, langcode) { 
+	let path = `../Readable/${langcode}/${name}.txt`
+
+	if (fs.existsSync(path)) {
+		return fs.readFileSync(path, 'utf8') 
+	} else {
+		return '';
+	}
+}
 
 const xavatar = getExcel('AvatarExcelConfigData');    // array
 
@@ -158,30 +170,30 @@ function exportData(folder, collateFunc, englishonly, skipwrite) {
 	console.log("done "+folder);
 }
 
-// exportData('characters', require('./collateCharacter.js'));
-// exportCurve('characters', 'AvatarCurveExcelConfigData');
-// exportData('constellations', require('./collateConstellation'));
-// exportData('talents', require('./collateTalent.js'));
-// exportData('weapons', require('./collateWeapon.js'));
-// exportCurve('weapons', 'WeaponCurveExcelConfigData')
-// exportData('artifacts', require('./collateArtifact.js'));
-// exportData('foods', require('./collateFood'));
-// exportData('materials', require('./collateMaterial')); // change: used both TextList/JumpList.
+exportData('characters', require('./collateCharacter.js'));
+exportCurve('characters', 'AvatarCurveExcelConfigData');
+exportData('constellations', require('./collateConstellation'));
+exportData('talents', require('./collateTalent.js'));
+exportData('weapons', require('./collateWeapon.js'));
+exportCurve('weapons', 'WeaponCurveExcelConfigData')
+exportData('artifacts', require('./collateArtifact.js'));
+exportData('foods', require('./collateFood'));
+exportData('materials', require('./collateMaterial')); // change: used both TextList/JumpList.
 exportData('domains', require('./collateDomain')); // run twice
-// exportData('enemies', require('./collateEnemy'));
-// exportCurve('enemies', 'MonsterCurveExcelConfigData');
+exportData('enemies', require('./collateEnemy'));
+exportCurve('enemies', 'MonsterCurveExcelConfigData');
 
-// exportData('domains', require('./collateDomainMonsterList')); // MUST do run only after both domains and enemies have run. sync.
+exportData('domains', require('./collateDomainMonsterList')); // MUST do run only after both domains and enemies have run. sync.
 
-// exportData('outfits', require('./collateOutfit'));
-// exportData('windgliders', require('./collateWindGlider'));
-// exportData('animals', require('./collateAnimal'));
-// exportData('namecards', require('./collateNamecard'));
-// exportData('geographies', require('./collateGeography'));
-// exportData('achievements', require('./collateAchievement'));
-// exportData('achievementgroups', require('./collateAchievementGroup'));
-// exportData('adventureranks', require('./collateAdventureRank'));
-// exportData('crafts', require('./collateCraft'));
+exportData('outfits', require('./collateOutfit'));
+exportData('windgliders', require('./collateWindGlider'));
+exportData('animals', require('./collateAnimal'));
+exportData('namecards', require('./collateNamecard'));
+exportData('geographies', require('./collateGeography'));
+exportData('achievements', require('./collateAchievement'));
+exportData('achievementgroups', require('./collateAchievementGroup'));
+exportData('adventureranks', require('./collateAdventureRank'));
+exportData('crafts', require('./collateCraft'));
 
 // exportData('commissions', require('./collateCommission'), true); // unfinished
 // exportData('voiceovers', require('./collateVoiceover'), true); // unfinished

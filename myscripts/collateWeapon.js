@@ -31,6 +31,8 @@ function collateWeapon(lang) {
 		data.weapontype = language[weaponTextMapHash[obj.weaponType]];
 		data.rarity = ''+obj.rankLevel;
 
+		data.story = getReadable(`Weapon${obj.id}${(lang != 'CHS') ? ('_' + lang) : ''}`, lang);
+
 		if(obj.weaponProp[0].propType !== 'FIGHT_PROP_BASE_ATTACK') console.log(obj,'weapon did not find base atk');
 		data.baseatk = obj.weaponProp.find(obj => obj.propType === 'FIGHT_PROP_BASE_ATTACK').initValue;
 
